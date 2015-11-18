@@ -40,8 +40,10 @@ Thumbs.db
 .sass-cache
 .svn
 
+/bootstrap/compiled.php
+
 # Project #
 ######################
-node_modules
-node_modules/*
-project/www/css/built
+/node_modules
+/vendor
+/storage
