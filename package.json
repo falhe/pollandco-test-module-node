@@ -1,0 +1,46 @@
+{
+  "name": "Pollandcomodulenode",
+  "version": "1.0.0",
+  "description": "Site poll and co utilisation des modules node",
+  "private": true,
+  "devDependencies": {
+    "backbone": "^1.2.3",
+    "underscore": "^1.8.3",
+    "bootstrap": "^3.3.5",
+    "clean-css": "^3.4.4",
+    "gulp": "^3.8.8",
+    "gulp-browserify": "^0.5.1",
+    "gulp-sass": "^2.0.4",
+    "handlebars": "^4.0.3",
+    "hbsfy": "^2.3.1",
+    "jquery": "^2.1.4",
+    "laravel-elixir": "*",
+    "node-sass": "^3.3.3",
+    "nodemon": "^1.7.1",
+    "uglifyjs": "^2.4.10",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "dependencies": {
+    "backbone": "^1.2.3"
+  },
+  "browserify": {
+    "transform": [
+      "hbsfy"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-js": "browserify public/js/main.js -o public/js/bundle.js",
+    "build-sass": "node-sass public/css/sass/main.scss public/css/compiled-sass/main.css",
+
+    "build-min-js": "browserify public/js/main.js | uglifyjs -o public/js/bundle.min.js",
+    "build-min-sass": "node-sass public/css/main.scss | cleancss public/css/compiled-sass/main.min.css",
+
+    "watch-js": "nodemon -e js -w public/js/main.js -x 'npm run build-js'",
+    "watch-sass": "nodemon -e scss -w public/css/sass/ -x 'npm run build-sass'",
+
+    "build": "npm run build-js & npm run build-sass",
+    "watch": "npm run watch-js & npm run watch-sass"
+  }
+}
