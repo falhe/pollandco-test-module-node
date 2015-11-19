@@ -47,12 +47,14 @@ gulp.task('bundle', function() {
     return bundle();
 });
 
+//Compile SASS
 gulp.task('styles', function() {
-    return gulp.src('./scss/*.scss')
+    gutil.log('compiling styles scss');
+    return gulp.src('./public/css/sass/*.scss')
         .pipe(plumber())
         .pipe(sass())
-        .pipe(minifyCss())
-        .pipe(gulp.dest('dist/css'))
+        //.pipe(minifyCss())
+        .pipe(gulp.dest('./public/dist/css'))
         .pipe(browserSync.stream());
 });
 
