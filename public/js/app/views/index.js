@@ -15,7 +15,7 @@ var Index = Backbone.View.extend({
 
 
 var toto = function(){
-    console.log('module index.js');
-};
+    console.log('module index.js avec BROWSERIFY  !!!!!!!!!!!!!!');
+}();
 
 module.exports = toto;

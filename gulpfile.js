@@ -20,7 +20,7 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'), //Convert streaming vinyl to buffer for uglify
-    bundler = watchify(browserify('./app/app.js'), {debug: true}),
+    bundler = watchify(browserify('./public/js/app/views/index.js'), {debug: true}),
     mocha = require('gulp-mocha');
 
 // TO DO BIEN FAIRE LE FICHIER GULP pour les watch sass et js
@@ -31,13 +31,14 @@ function bundle() {
     gutil.log('Compiling JS...');
     return bundler.bundle().on('error', function(err) {
             gutil.log(err.message);
+            gutil.log('ERREUR DANS LA COMPILATION DU JS !!!!!!!!!!!!!!!!!');
             browserSync.notify('Browserify Error!');
             this.emit('end');
         })
         .pipe(source('bundle.js'))
         // .pipe(buffer())
         // .pipe(uglify())
-        .pipe(gulp.dest('./build/'))
+        .pipe(gulp.dest('./public/js/app/build/'))
         .pipe(browserSync.stream({
             once: true
         }));
