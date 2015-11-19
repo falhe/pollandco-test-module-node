@@ -74,6 +74,14 @@ gulp.task('test', function() {
         .pipe(mocha());
 });
 
+// Browsersync proxy pour pouvoir l'utiliser avec un serveur PHP
+gulp.task('browser-sync', function(){
+    browserSync.init({
+        proxy: 'http://localhost/test/projet/pollandco-test-module-node/public/'
+    });
+    gulp.watch('public/css/sass/*.scss', ['styles']);
+});
+
 
 // gulp.task('browserify', function() {
 //     return browserify('js/app.js').bundle()
