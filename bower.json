@@ -1,0 +1,22 @@
+{
+  "name": "pollAndCoNodeModule",
+  "description": "Site poll and co utilisation des modules node",
+  "main": "",
+  "authors": [
+    "Falihery Rasolonirainy"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "bootstrap-sass"
+  ],
+  "homepage": "https://github.com/falhe/pollandco-test-module-node",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": "~3.3.5"
+  }
+}

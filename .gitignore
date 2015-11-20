@@ -44,6 +44,7 @@ Thumbs.db
 
 # Project #
 ######################
-/node_modules
-/vendor
-/storage
+bower_components/
+node_modules/
+vendor/
+storage/

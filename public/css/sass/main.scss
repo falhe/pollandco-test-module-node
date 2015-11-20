@@ -1,8 +1,10 @@
+@import "../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+
 @import "variables";
 
 body{
     font-size: 14px;
     font-weight: normal;
-    color: green;
+    color: $red;
     font-weight: lighter;
 }
