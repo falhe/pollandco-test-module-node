@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class="panel panel-default login">
-		<div class="panel-heading">Se connecter</div>
+		<!-- <div class="panel-heading">Se connecter</div> -->
 		<div class="panel-body">
 
 			{!! Form::open(['class' => 'form-horizontal']) !!}
