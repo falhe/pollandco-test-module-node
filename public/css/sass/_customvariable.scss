@@ -1,4 +1,79 @@
 /* CUSTOM SASS VARIABLES */
 
-/* Forms */
-$border-radius-base: 0px;
+//
+// Colors
+// --------------------------------------------------
+$brand-primary: 		#47B39D;
+$green-light: 			#D9F5BE;
+
+//
+// Navbar
+// --------------------------------------------------
+.navbar-top{
+	-webkit-box-shadow: 0 7px 12px -4px #ccc;
+	-moz-box-shadow: 0 7px 12px -4px #ccc;
+	box-shadow: 0 7px 12px -4px #ccc;
+	border-radius: 0 !important;
+}
+
+//
+// Navs
+// --------------------------------------------------
+$nav-link-hover-bg: 	transparent;
+.nav{
+
+	> li {
+	border-top: 3px solid transparent;
+
+		&:hover,
+		&:focus{
+			border-top: 3px solid $brand-primary;
+		}
+
+		> a {
+
+		}
+	}
+}
+
+//
+// Forms
+// --------------------------------------------------
+.form-control{
+	border: 0;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+
+	&:focus{
+		border-width: 2px;
+		-webkit-box-shadow: none !important;
+		-moz-box-shadow: none !important;
+		box-shadow: none !important;
+	}
+}
+
+$border-radius-base: 	15px;
+$input-bg: 				#F3F3F3;
+$input-border: 			transparent;
+$input-border-focus: 	$brand-primary;
+
+//
+// Panels
+// --------------------------------------------------
+$panel-default-border: transparent;
+$panel-default-heading-bg: transparent;
+
+.login{
+	padding: 5% 0 0 0;
+}
+.panel{
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
+.panel-heading{
+	border: none;
+	text-align: center;
+}

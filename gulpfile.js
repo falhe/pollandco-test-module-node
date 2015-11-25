@@ -80,6 +80,7 @@ gulp.task('browser-sync', function(){
         proxy: 'http://localhost/test/projet/pollandco-test-module-node/public/'
     });
     gulp.watch('public/css/sass/*.scss', ['styles']);
+    gulp.watch('resources/views/*.blade.php').on('change', browserSync.reload);
 });
 
 

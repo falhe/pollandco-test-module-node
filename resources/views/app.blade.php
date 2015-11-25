@@ -16,8 +16,8 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body>
-	<nav class="navbar">
+<body id="pollstar" class="pollstar">
+	<nav class="navbar navbar-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
