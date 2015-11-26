@@ -42,7 +42,11 @@ gulp.task('bundle', function() {
 //Compile SASS
 gulp.task('styles', function() {
     gutil.log('compiling styles scss !!!!');
-    return gulp.src('./public/css/sass/*.scss')
+    return gulp.on('error', function(err) {
+            gutil.log(err.message);
+            gutil.log('styles error !!!!');
+            this.emit('end');
+        }).src('./public/sass/*.scss')
         .pipe(plumber())
         .pipe(sass())
         //.pipe(minifyCss())
@@ -70,7 +74,7 @@ gulp.task('test', function() {
 // Browsersync proxy pour pouvoir l'utiliser avec un serveur PHP
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: 'http://localhost/test/projet/pollandco-test-module-node/public/'
+        proxy: 'http://localhost:8888/pollandco-test-module-node/public/'
     });
 
     gulp.watch('public/css/sass/*.scss', ['styles']);

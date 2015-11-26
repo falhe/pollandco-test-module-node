@@ -9,7 +9,7 @@
 
 @section('content')
 
-    <div class="col-lg-9">
+    <div class="col-lg-12">
 
         <h3>Recherche de panéliste</h3>
 
@@ -23,7 +23,7 @@
             </div>
 
             <div class="form-group">
-                {!! Form::submit('Rechercher') !!}
+                {!! Form::submit('Rechercher', ['class' => 'form-control btn btn-primary']) !!}
             </div>
 
             {!! Form::close() !!}

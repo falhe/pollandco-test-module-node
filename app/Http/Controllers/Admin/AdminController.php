@@ -13,6 +13,9 @@ use Illuminate\Http\RedirectResponse;
 
 class AdminController extends Controller {
 
+	protected $redirectTo = 'admin/dashboard';
+	protected $loginPath = 'admin';
+
 	/*
 	|--------------------------------------------------------------------------
 	| Registration & Login Controller
@@ -65,6 +68,7 @@ class AdminController extends Controller {
 					]);
 
 					//$this->auth->login($user, $request->has('remember'));
+					//dd(redirect()->intended($this->redirectPath()));
 					//return redirect()->intended($this->redirectPath());
 					return new RedirectResponse(url('/admin/profiladmin', [$user->id]));
 				}else{

@@ -47,7 +47,7 @@ class AuthenticateAdmin {
 		}elseif ($isUnconnected) {
 			# code...
 			//dd('pas connec AuthenticateAdmin is not connected');
-			return new RedirectResponse(url('/'));
+			return new RedirectResponse(url('/admin'));
 		}
 
 		//if ($toto == 'admin')

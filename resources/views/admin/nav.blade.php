@@ -1,4 +1,4 @@
-<div class="col-lg-3">
+<div class="col-lg-3 sidebar" id="sidebar">
     <ul class="nav og nav-stacked">
         <li class="tp">Suivi panéliste & Dashboard </li>
         <li>

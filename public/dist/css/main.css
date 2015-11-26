@@ -1,16 +1,5 @@
 @charset "UTF-8";
 /* CUSTOM SASS VARIABLES */
-.navbar-top {
-  -webkit-box-shadow: 0 7px 12px -4px #ccc;
-  -moz-box-shadow: 0 7px 12px -4px #ccc;
-  box-shadow: 0 7px 12px -4px #ccc;
-  border-radius: 0 !important; }
-
-.nav > li {
-  border-top: 3px solid transparent; }
-  .nav > li:hover, .nav > li:focus {
-    border-top: 3px solid #47B39D; }
-
 .form-control {
   border: 0;
   -webkit-box-shadow: none !important;
@@ -21,6 +10,17 @@
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important; }
+
+.navbar-top {
+  -webkit-box-shadow: 0 7px 12px -4px #ccc;
+  -moz-box-shadow: 0 7px 12px -4px #ccc;
+  box-shadow: 0 7px 12px -4px #ccc;
+  border-radius: 0 !important; }
+
+.navbar-top .nav > li {
+  border-top: 3px solid transparent; }
+  .navbar-top .nav > li:hover, .navbar-top .nav > li:focus {
+    border-top: 3px solid #47B39D; }
 
 .login {
   padding: 5% 0 0 0; }
@@ -35,8 +35,45 @@
   border: none;
   text-align: center; }
 
+#sidebar {
+  position: fixed;
+  top: 55px;
+  left: 0;
+  bottom: 0;
+  padding: 30px 0 0 30px;
+  background-color: #22202B;
+  color: #ffffff; }
+  #sidebar .nav {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none; }
+    #sidebar .nav > li {
+      position: relative;
+      display: block; }
+      #sidebar .nav > li > a {
+        position: relative;
+        display: block;
+        padding: 10px 0; }
+        #sidebar .nav > li > a:hover, #sidebar .nav > li > a:focus {
+          text-decoration: none;
+          background-color: transparent; }
+      #sidebar .nav > li.disabled > a {
+        color: #383745; }
+        #sidebar .nav > li.disabled > a:hover, #sidebar .nav > li.disabled > a:focus {
+          text-decoration: none;
+          background-color: transparent;
+          cursor: not-allowed; }
+    #sidebar .nav .open > a, #sidebar .nav .open > a:hover, #sidebar .nav .open > a:focus {
+      background-color: transparent;
+      border-color: #47B39D; }
+    #sidebar .nav > li > a > img {
+      max-width: none; }
+
+#content {
+  padding: 0 0 0 300px; }
+
 /*!
- * Import from Bower
+ * coucou
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -2655,9 +2692,13 @@ select[multiple].input-lg,
   color: #3c763d; }
 
 .has-success .form-control {
-  border-color: #3c763d; }
+  border-color: #3c763d;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .has-success .form-control:focus {
-    border-color: #2b542c; }
+    border-color: #2b542c;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168; }
 
 .has-success .input-group-addon {
   color: #3c763d;
@@ -2680,9 +2721,13 @@ select[multiple].input-lg,
   color: #8a6d3b; }
 
 .has-warning .form-control {
-  border-color: #8a6d3b; }
+  border-color: #8a6d3b;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .has-warning .form-control:focus {
-    border-color: #66512c; }
+    border-color: #66512c;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b; }
 
 .has-warning .input-group-addon {
   color: #8a6d3b;
@@ -2705,9 +2750,13 @@ select[multiple].input-lg,
   color: #a94442; }
 
 .has-error .form-control {
-  border-color: #a94442; }
+  border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
   .has-error .form-control:focus {
-    border-color: #843534; }
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483; }
 
 .has-error .input-group-addon {
   color: #a94442;
@@ -3592,7 +3641,7 @@ tbody.collapse.in {
         text-decoration: none;
         background-color: transparent; }
     .nav > li.disabled > a {
-      color: #777777; }
+      color: #383745; }
       .nav > li.disabled > a:hover, .nav > li.disabled > a:focus {
         color: #777777;
         text-decoration: none;
@@ -5848,5 +5897,4 @@ button.close {
 
 body {
   font-size: 13px;
-  font-weight: normal;
-  font-weight: lighter; }
+  font-weight: normal; }
