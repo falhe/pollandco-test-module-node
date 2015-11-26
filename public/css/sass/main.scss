@@ -1,10 +1,8 @@
+@import "customvariable";
 @import "../../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "variables";
-
 body{
-    font-size: 14px;
+    font-size: 13px;
     font-weight: normal;
-    color: $red;
     font-weight: lighter;
 }
