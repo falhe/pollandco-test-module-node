@@ -50,7 +50,7 @@ gulp.task('bundle', function() {
 
 //Compile SASS
 gulp.task('styles', function() {
-    gutil.log('compiling styles scss');
+    gutil.log('compiling styles scss !!!!');
     return gulp.src('./public/css/sass/*.scss')
         .pipe(plumber())
         .pipe(sass())
