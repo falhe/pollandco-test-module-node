@@ -67,10 +67,12 @@ class AdminController extends Controller {
 						'password' => $request->get('password')
 					]);
 
+					//admin/dashboard/{id}
+					$urlRedirectTo = $this->redirectPath() .'/'. $user->id;
+
 					//$this->auth->login($user, $request->has('remember'));
-					//dd(redirect()->intended($this->redirectPath()));
-					//return redirect()->intended($this->redirectPath());
-					return new RedirectResponse(url('/admin/profiladmin', [$user->id]));
+					return redirect()->intended($urlRedirectTo);
+					//return new RedirectResponse(url('/admin/profiladmin', [$user->id]));
 				}else{
 					return new RedirectResponse(url('/admin'));
 				}
@@ -81,10 +83,18 @@ class AdminController extends Controller {
 			->with('error', Lang::get('site.loginfailed'));
 	}
 
-	public function getProfiladmin(Request $request, $user_id){
+	//
+	// Redirect to the admin dashboard when connected
+	//-----------------------------------
+	public function getDashboard($user_id){
 		$user = User::findOrFail($user_id);
-		return view('admin.dashboard', compact('user'));
+		return view('pages.dashboard-admin', compact('user'));
 	}
+
+	// public function getProfiladmin(Request $request, $user_id){
+	// 	$user = User::findOrFail($user_id);
+	// 	return view('admin.dashboard', compact('user'));
+	// }
 
 	public function getIndex()
 	{

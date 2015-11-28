@@ -64,7 +64,7 @@
 		</div>
 	</nav>
 
-	<div class="container" id="content">
+	<div class="container">
 		@if ( Auth::check() )
 			{{-- Hello {{Auth::user()->firstname}} {{Auth::user()->lastname}} --}}
 		@endif
