@@ -16,14 +16,38 @@
     <![endif]-->
     </head>
     <body id="pollstar" class="pollstar">
-        <header> @include('layout.header') </header>
-            <div class="container">
-            <div class="sidebar"> @include('layout.sidebar') </div>
-            <div class="contents" id="content"> @yield('content') </div>
-            <footer> @include('layout.footer') </footer>
+
+        {{-- HEADER --}}
+        <header>
+            @include('layout.header')
+        </header>
+
+        {{-- CONTENT --}}
+        <div class="">
+
+            {{-- SIDEBAR --}}
+            <div class="sidebar">
+                @include('layout.sidebar')
+            </div>
+
+            {{-- CONTENT CENTRAL --}}
+            <div class="contents" id="content">
+                @yield('content')
+            </div>
+
+            {{-- FOOTER --}}
+            <footer>
+                @include('layout.footer')
+            </footer>
+
         </div>
 
+        <script>
+            var rootPath = '{{ url() }}';
+        </script>
         <script type="text/javascript" src="{{ asset('/js/jquery-2.1.4.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/bootstrap.min.js') }}"></script>
+
+        <script src="{{ asset('js/app/build/bundle.js') }}"></script>
     </body>
 </html>

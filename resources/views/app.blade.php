@@ -85,20 +85,7 @@
 		rootPath = '{{ url() }}';
 	</script>
 
-	<!-- Scripts -->
-
-	<script src="{{ asset('/js/bundle.js') }}" ></script>
 	<script type="text/javascript" src="{{ asset('/js/jquery-2.1.4.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('/js/bootstrap.min.js') }}"></script>
-
-
-
-	<script type="text/javascript" src="{{ asset('/js/underscore-1.8.3-min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('/js/backbone-1.2.1-min.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('/js/backbone.mediator.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('/js/handlebars-v3.0.3.js') }}" ></script>
-	<script type="text/javascript" src="{{ asset('/js/moment-2.10.6-min.js') }}"></script>
-
-	<script type="text/javascript" src="{{ asset('/js/app/app.backbone.js') }}" ></script>
 </body>
 </html>

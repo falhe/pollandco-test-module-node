@@ -49,7 +49,8 @@ Route::controllers([
 * REST
 *
 **/
-Route::get('api/searchusers', 'RestController@searchusers');
+Route::resource('api/searchusers', 'SearchuserController');
+//Route::get('api/searchusers', 'RestController@searchusers');
 Route::put('api/points/substraction/{id}', 'PointsController@substraction');
 Route::resource('api/points', 'PointsController');
 

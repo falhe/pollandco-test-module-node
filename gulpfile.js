@@ -4,17 +4,17 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     minifyCss = require('gulp-minify-css'),
     uglify = require('gulp-uglify'),
+    sourcemaps = require('gulp-sourcemaps'),
     browserSync = require('browser-sync').create(),
     watchify = require('watchify'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'), //Convert streaming vinyl to buffer for uglify
-    bundler = watchify(browserify('./public/js/app/views/index.js'), {
+    bundler = watchify(browserify('./public/js/main.js'), {
         debug: true
     }),
     mocha = require('gulp-mocha');
 
-// TO DO BIEN FAIRE LE FICHIER GULP pour les watch sass et js
 
 bundler.on('update', bundle);
 
@@ -27,7 +27,12 @@ function bundle() {
             this.emit('end');
         })
         .pipe(source('bundle.js'))
-        // .pipe(buffer())
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+            // Add transformation tasks to the pipeline here.
+            //.pipe(uglify())
+            .on('error', gutil.log)
+        .pipe(sourcemaps.write('./'))
         // .pipe(uglify())
         .pipe(gulp.dest('./public/js/app/build/'))
         .pipe(browserSync.stream({
@@ -37,6 +42,25 @@ function bundle() {
 
 gulp.task('bundle', function() {
     return bundle();
+});
+
+//Compile JS
+gulp.task('javascript', function () {
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './public/js/main.js',
+    debug: true
+  });
+
+  return b.bundle()
+    .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        //.pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/js/app/build/'));
 });
 
 //Compile SASS
@@ -77,6 +101,6 @@ gulp.task('browser-sync', function() {
         proxy: 'http://localhost:8888/pollandco-test-module-node/public/'
     });
 
-    gulp.watch('public/css/sass/*.scss', ['styles']);
-    gulp.watch('resources/views/{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
+    gulp.watch('public/sass/*.scss', ['styles']);
+    gulp.watch('resources/views/{,layout/}/{,pages/}{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
 });

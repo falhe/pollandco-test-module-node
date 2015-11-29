@@ -70,9 +70,8 @@ class AdminController extends Controller {
 					//admin/dashboard/{id}
 					$urlRedirectTo = $this->redirectPath() .'/'. $user->id;
 
-					//$this->auth->login($user, $request->has('remember'));
+					$this->auth->login($user, $request->has('remember'));
 					return redirect()->intended($urlRedirectTo);
-					//return new RedirectResponse(url('/admin/profiladmin', [$user->id]));
 				}else{
 					return new RedirectResponse(url('/admin'));
 				}
@@ -88,13 +87,8 @@ class AdminController extends Controller {
 	//-----------------------------------
 	public function getDashboard($user_id){
 		$user = User::findOrFail($user_id);
-		return view('pages.dashboard-admin', compact('user'));
+		return view('pages.search-users-admin', compact('user'));
 	}
-
-	// public function getProfiladmin(Request $request, $user_id){
-	// 	$user = User::findOrFail($user_id);
-	// 	return view('admin.dashboard', compact('user'));
-	// }
 
 	public function getIndex()
 	{
@@ -110,14 +104,6 @@ class AdminController extends Controller {
 	public function getRechercherusers(){
 		return view('admin.rechercherusers');
 	}
-
-	// public function getUser($user_id){
-	//  	$user = User::with('role')
-	//  					->where('id', $user_id )
-	//  					->get();
-	//  	return view('admin.profiluser', compact('user'));
-	// }
-
 
 	/**
 	 * Show the form for creating a new resource.

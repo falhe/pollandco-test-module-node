@@ -1,3 +1,4 @@
+{{-- LOGIN FORM TO ACCESS ADMIN BACK-OFFICE --}}
 @extends('app')
 
 @section('content')
