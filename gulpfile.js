@@ -67,6 +67,22 @@ gulp.task('javascript', function() {
         .pipe(gulp.dest('./public/js/app/build/'));
 });
 
+//WATCH JS
+gulp.task('watchingjs', function(){
+    return browserify({
+        entries: './public/js/main.js',
+        debug: true
+    })
+    .bundle()
+    .pipe(source('bundle-two.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({
+        loadMaps: true
+    }))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/dist/js'))
+});
+
 //Compile SASS
 gulp.task('styles', function() {
     gutil.log('compiling styles scss !!!!');
@@ -102,9 +118,10 @@ gulp.task('test', function() {
 // Browsersync proxy pour pouvoir l'utiliser avec un serveur PHP
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: 'http://localhost:8888/pollandco-test-module-node/public/'
+        proxy: 'http://localhost/pollandco-test-module-node/public/'
     });
 
     gulp.watch('public/sass/*.scss', ['styles']);
     gulp.watch('resources/views/{,layout/}/{,pages/}{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
+    gulp.watch('public/js/**/*.js', ['watchingjs']);
 });

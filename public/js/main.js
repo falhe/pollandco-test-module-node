@@ -29,7 +29,7 @@ var $ = require('jquery'),
     app.lulu = function() {
         console.log('lulu');
     };
-    console.log('toto');
+    console.log("test console toto");
 
     // //INSTANTIATE VIEWS
     app.SearchUsersList = new SearchUsersListView();
