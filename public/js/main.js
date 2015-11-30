@@ -1,24 +1,9 @@
-//require('../static/style.scss');
-
-// var $ = require('jquery-untouched');
-// var Backbone = require('backbone');
-// Backbone.$ = $;
-
-// console.log(Backbone.VERSION);
-
-// var Index = require('./app/views/index');
-
-// Index();
-
-// console.log('sass compilé qsdndqsjhbqsdfsdfdssdfqjhqd');
-// console.log('toto et tata blaaaa dsnjksnjknjdkq 12324 totototototo');
-
-
 var $ = require('jquery'),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
-    SearchUsersCollection = require('./app/collections/app.searchusers.collection');
-    SearchUsersListView = require('./app/views/app.searchusers-list.view');
+    SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
+    SearchUsersListView = require('./app/views/app.searchusers-list.view'),
+    Router = require('./app/router/app.router');
     // PubSub = require('./pubsub'),
     // Controller = require('./controllers/app.controller'),
     // BookListView = require('./views/app.book-list.view'),
@@ -38,6 +23,7 @@ var $ = require('jquery'),
     // INSTANTIATE COLLECTION
     //app.SearchUsersCollection = new SearchUsersCollection();
 
+    app.router = new Router;
     app.controller = Controller;
     app.toto = "toto";
     app.lulu = function(){
@@ -50,5 +36,9 @@ var $ = require('jquery'),
     // app.bookListView = new BookListView();
     // app.panierListView = new PanierListView();
     // app.prixPanierView = new PrixPanierView();
+
+    //FOR TEST
+    //Instantiate router
+    Backbone.history.start({pushState: true});
 
 })(window, $);

@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Router = require('../router/app.router');
 
 var Controller = (function() {
     var controller = {};

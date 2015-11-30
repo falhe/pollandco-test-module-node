@@ -28,10 +28,12 @@ function bundle() {
         })
         .pipe(source('bundle.js'))
         .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-            // Add transformation tasks to the pipeline here.
-            //.pipe(uglify())
-            .on('error', gutil.log)
+        .pipe(sourcemaps.init({
+            loadMaps: true
+        }))
+        // Add transformation tasks to the pipeline here.
+        //.pipe(uglify())
+        .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
         // .pipe(uglify())
         .pipe(gulp.dest('./public/js/app/build/'))
@@ -45,22 +47,24 @@ gulp.task('bundle', function() {
 });
 
 //Compile JS
-gulp.task('javascript', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-    entries: './public/js/main.js',
-    debug: true
-  });
+gulp.task('javascript', function() {
+    // set up the browserify instance on a task basis
+    var b = browserify({
+        entries: './public/js/main.js',
+        debug: true
+    });
 
-  return b.bundle()
-    .pipe(source('bundle.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
+    return b.bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({
+            loadMaps: true
+        }))
         // Add transformation tasks to the pipeline here.
         //.pipe(uglify())
         .on('error', gutil.log)
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./public/js/app/build/'));
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./public/js/app/build/'));
 });
 
 //Compile SASS
