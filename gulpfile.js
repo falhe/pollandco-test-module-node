@@ -46,29 +46,9 @@ gulp.task('bundle', function() {
     return bundle();
 });
 
-//Compile JS
-gulp.task('javascript', function() {
-    // set up the browserify instance on a task basis
-    var b = browserify({
-        entries: './public/js/main.js',
-        debug: true
-    });
-
-    return b.bundle()
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({
-            loadMaps: true
-        }))
-        // Add transformation tasks to the pipeline here.
-        //.pipe(uglify())
-        .on('error', gutil.log)
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./public/js/app/build/'));
-});
-
-//WATCH JS
-gulp.task('watchingjs', function(){
+// compile js
+gulp.task('js', function(){
+    gutil.log('compiling js browserify !!!!');
     return browserify({
         entries: './public/js/main.js',
         debug: true
@@ -83,28 +63,36 @@ gulp.task('watchingjs', function(){
     .pipe(gulp.dest('./public/dist/js'))
 });
 
-//Compile SASS
+// create a task that ensures the `js` task is complete before reloading browsers
+gulp.task('js-watch', ['js'], browserSync.reload);
+
+// compile sass
 gulp.task('styles', function() {
     gutil.log('compiling styles scss !!!!');
-    return gulp.on('error', function(err) {
-            gutil.log(err.message);
-            gutil.log('styles error !!!!');
-            this.emit('end');
-        }).src('./public/sass/*.scss')
+    return gulp.src('./public/sass/*.scss')
         .pipe(plumber())
-        .pipe(sass())
+        .pipe(sass({
+            outputStyle: 'expanded' // expanded, nested, compressed
+        })
+        .on('error', sass.logError))
+        .pipe(sourcemaps.init({
+            loadMaps: true
+        }))
+        .pipe(sourcemaps.write('./'))
         //.pipe(minifyCss())
         .pipe(gulp.dest('./public/dist/css'))
         .pipe(browserSync.stream());
 });
 
-gulp.task('default', ['styles', 'bundle'], function() {
+// serve to launch browserSync and watch JS files
+gulp.task('serve', ['js', 'styles'], function(){
     browserSync.init({
-        server: './'
+        proxy: 'http://localhost/pollandco-test-module-node/public/'
     });
-    gulp.watch('./scss/*.scss', ['styles']);
-    gulp.watch('*.html').on('change', browserSync.reload);
-    gulp.watch('./app/views/templates/*.hbs').on('change', browserSync.reload);
+
+    gulp.watch('public/js/**/*.js', ['js-watch']);
+    gulp.watch('public/sass/*.scss', ['styles']);
+    gulp.watch('resources/views/{,layout/}/{,pages/}{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
 });
 
 gulp.task('test', function() {
@@ -113,15 +101,4 @@ gulp.task('test', function() {
         })
         // gulp-mocha needs filepaths so you can't have any plugins before it
         .pipe(mocha());
-});
-
-// Browsersync proxy pour pouvoir l'utiliser avec un serveur PHP
-gulp.task('browser-sync', function() {
-    browserSync.init({
-        proxy: 'http://localhost/pollandco-test-module-node/public/'
-    });
-
-    gulp.watch('public/sass/*.scss', ['styles']);
-    gulp.watch('resources/views/{,layout/}/{,pages/}{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
-    gulp.watch('public/js/**/*.js', ['watchingjs']);
 });

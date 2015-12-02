@@ -13843,7 +13843,7 @@ var Router = Backbone.Router.extend({
 
     help: function() {
         console.log("help help");
-        $('body').empty();
+        $('body').find('.contents content-wrapper').html('help');
     },
 
     search: function(query, page) {
