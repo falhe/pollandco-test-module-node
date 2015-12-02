@@ -13824,20 +13824,34 @@ module.exports = User;
 },{"backbone":1}],27:[function(require,module,exports){
 var Backbone = require('backbone');
 
+//FOR TEST
+//TODO create rooter with real routes
 var Router = Backbone.Router.extend({
+
+    whereami: null,
+
+    initialize: function(){
+        console.log("[Router]:init");
+    },
 
     routes: {
         "help": "help", // #help
         "search/:query": "search", // #search/kiwis
-        "search/:query/p:page": "search" // #search/kiwis/p7
+        "search/:query/p:page": "search", // #search/kiwis/p7
+        "gestion_points": "gestion_points"
     },
 
     help: function() {
+        debugger;
         console.log("help");
     },
 
     search: function(query, page) {
         console.log("search");
+    },
+
+    gestion_points: function(){
+        console.log("gestion_points");
     }
 
 });
@@ -13938,11 +13952,11 @@ var $ = require('jquery'),
     SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
     SearchUsersListView = require('./app/views/app.searchusers-list.view'),
     Router = require('./app/router/app.router');
-    // PubSub = require('./pubsub'),
-    // Controller = require('./controllers/app.controller'),
-    // BookListView = require('./views/app.book-list.view'),
-    // PanierListView = require('./views/app.panier-list.view'),
-    // PrixPanierView = require('./views/app.prix-panier.view');
+// PubSub = require('./pubsub'),
+// Controller = require('./controllers/app.controller'),
+// BookListView = require('./views/app.book-list.view'),
+// PanierListView = require('./views/app.panier-list.view'),
+// PrixPanierView = require('./views/app.prix-panier.view');
 
 
 (function(window, $, undefined) {
@@ -13960,10 +13974,10 @@ var $ = require('jquery'),
     app.router = new Router;
     app.controller = Controller;
     app.toto = "toto";
-    app.lulu = function(){
+    app.lulu = function() {
         console.log('lulu');
     };
-    console.log('toto');
+    console.log("test console toto");
 
     // //INSTANTIATE VIEWS
     app.SearchUsersList = new SearchUsersListView();
@@ -13971,8 +13985,13 @@ var $ = require('jquery'),
     // app.panierListView = new PanierListView();
     // app.prixPanierView = new PrixPanierView();
 
+    //FOR TEST
+    //Instantiate router
+    Backbone.history.start({
+        pushState: true,
+        root: 'admin/'
+    });
     debugger;
-    Backbone.history.start({pushState: true});
 
 })(window, $);
 },{"./app/collections/app.searchusers.collection":24,"./app/controllers/app.controller":25,"./app/router/app.router":27,"./app/views/app.searchusers-list.view":30,"backbone":1,"jquery":22}]},{},[31])

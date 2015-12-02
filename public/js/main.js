@@ -41,7 +41,8 @@ var $ = require('jquery'),
     //Instantiate router
     Backbone.history.start({
         pushState: true,
-        root: '/public/'
+        root: 'admin/'
     });
+    debugger;
 
 })(window, $);

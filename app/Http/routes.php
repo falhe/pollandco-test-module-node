@@ -24,17 +24,19 @@ Route::post('profil', ['uses' => 'UsersController@update']);
 **/
 Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function() {
 
-    //Route::resource('/user/{id}/points', 'PointsController');
-    //Route::controller('/', 'AdminController');
-
+    //protected route for ma SPA
+    Route::get('/{action}', function(){
+        //return 'SPA';
+        //$user = User::findOrFail($user_id);
+        return view('pages.search-users-admin');
+    })
+    ->where('action', '(.*)');
 
     Route::group(['middleware' => 'admin'], function(){
-        //Route::controller('/profiladmin/{id}', 'AdminController');
         Route::get('rechercherusers', 'AdminController@getRechercherusers');
         Route::resource('user', 'UsersController');
         Route::resource('formulaire', 'FormulaireController');
         Route::get('gererpoints/{id}', 'GererpointsController@index');
-        //Route::resource('points', 'PointsController');
     });
     Route::controller('/', 'AdminController');
 });
