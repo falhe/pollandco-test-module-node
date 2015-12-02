@@ -54,7 +54,7 @@ gulp.task('js', function(){
         debug: true
     })
     .bundle()
-    .pipe(source('bundle-two.js'))
+    .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({
         loadMaps: true

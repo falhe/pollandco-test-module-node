@@ -37,7 +37,6 @@ var $ = require('jquery'),
     // app.panierListView = new PanierListView();
     // app.prixPanierView = new PrixPanierView();
 
-    //FOR TEST
     //Instantiate router
     Backbone.history.start({
         pushState: true,
