@@ -13828,18 +13828,30 @@ var Backbone = require('backbone');
 //TODO create rooter with real routes
 var Router = Backbone.Router.extend({
 
+    whereami: null,
+
+    initialize: function(){
+        console.log("[Router]:init");
+    },
+
     routes: {
         "help": "help", // #help
         "search/:query": "search", // #search/kiwis
-        "search/:query/p:page": "search" // #search/kiwis/p7
+        "search/:query/p:page": "search", // #search/kiwis/p7
+        "gestion_points": "gestion_points"
     },
 
     help: function() {
-        console.log("help");
+        console.log("help help");
+        $('body').empty();
     },
 
     search: function(query, page) {
         console.log("search");
+    },
+
+    gestion_points: function(){
+        console.log("gestion_points");
     }
 
 });
@@ -13977,7 +13989,7 @@ var $ = require('jquery'),
     //Instantiate router
     Backbone.history.start({
         pushState: true,
-        root: '/public/'
+        root: 'admin/'
     });
 
 })(window, $);

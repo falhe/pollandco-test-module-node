@@ -18,8 +18,8 @@ var Router = Backbone.Router.extend({
     },
 
     help: function() {
-        debugger;
-        console.log("help");
+        console.log("help help");
+        $('body').find('.contents content-wrapper').html('help');
     },
 
     search: function(query, page) {

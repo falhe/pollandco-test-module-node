@@ -13842,8 +13842,8 @@ var Router = Backbone.Router.extend({
     },
 
     help: function() {
+        console.log("help help");
         debugger;
-        console.log("help");
     },
 
     search: function(query, page) {
@@ -13991,7 +13991,6 @@ var $ = require('jquery'),
         pushState: true,
         root: 'admin/'
     });
-    debugger;
 
 })(window, $);
 },{"./app/collections/app.searchusers.collection":24,"./app/controllers/app.controller":25,"./app/router/app.router":27,"./app/views/app.searchusers-list.view":30,"backbone":1,"jquery":22}]},{},[31])

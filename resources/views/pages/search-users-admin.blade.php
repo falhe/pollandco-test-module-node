@@ -6,7 +6,7 @@
 
     {{-- search-users-admin --}}
 
-    <div class="col-lg-9 col-lg-offset-3 form-search-users-container">
+    {{-- <div class="col-lg-9 col-lg-offset-3 form-search-users-container"> --}}
 
         {{-- <h3>Recherche de panéliste</h3> --}}
 
@@ -45,6 +45,6 @@
             </table>
         </div>
 
-    </div>
+    {{-- </div> --}}
 
 @stop

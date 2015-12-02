@@ -23,16 +23,20 @@
         </header>
 
         {{-- CONTENT --}}
-        <div class="">
+        <div class="central">
 
             {{-- SIDEBAR --}}
-            <div class="sidebar">
+            <div class="sidebar-wrapper">
                 @include('layout.sidebar')
             </div>
 
             {{-- CONTENT CENTRAL --}}
-            <div class="contents" id="content">
-                @yield('content')
+            <div class="contents content-wrapper" id="content">
+                <div class="container-fluid">
+                    <div class="content">
+                        @yield('content')
+                    </div>
+                </div>
             </div>
 
             {{-- FOOTER --}}

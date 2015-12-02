@@ -1,7 +1,7 @@
 {{-- <div>My sidebar section here</div> --}}
 
-<div class="col-lg-3 sidebar" id="sidebar">
-    <ul class="nav og nav-stacked">
+{{--<div class="col-lg-3 sidebar" > --}}
+    <ul class="nav og nav-stacked" id="sidebar">
         <li class="tp">Suivi panéliste & Dashboard </li>
         <li class="@if ($currentPage)active @endif">
             <a href="{{ url('/admin/rechercherusers') }}">Recherche de panéliste</a>
@@ -25,5 +25,4 @@
             <a href="../light/index.html">Light UI</a>
         </li>
     </ul>
-</div>
-
+{{-- </div> --}}

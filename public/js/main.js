@@ -43,6 +43,5 @@ var $ = require('jquery'),
         pushState: true,
         root: 'admin/'
     });
-    debugger;
 
 })(window, $);
