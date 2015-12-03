@@ -1,50 +1,21 @@
-var gulp = require('gulp'),
-    plumber = require('gulp-plumber'),
-    gutil = require('gulp-util'),
-    sass = require('gulp-sass'),
-    minifyCss = require('gulp-minify-css'),
-    uglify = require('gulp-uglify'),
-    sourcemaps = require('gulp-sourcemaps'),
-    browserSync = require('browser-sync').create(),
-    watchify = require('watchify'),
-    browserify = require('browserify'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer'), //Convert streaming vinyl to buffer for uglify
-    bundler = watchify(browserify('./public/js/main.js'), {
-        debug: true
-    }),
-    mocha = require('gulp-mocha');
-
-
-bundler.on('update', bundle);
-
-function bundle() {
-    gutil.log('Compiling JS...');
-    return bundler.bundle().on('error', function(err) {
-            gutil.log(err.message);
-            gutil.log('ERREUR DANS LA COMPILATION DU JS !!!!!!!!!!!!!!!!!');
-            browserSync.notify('Browserify Error!');
-            this.emit('end');
-        })
-        .pipe(source('bundle.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({
-            loadMaps: true
-        }))
-        // Add transformation tasks to the pipeline here.
-        //.pipe(uglify())
-        .on('error', gutil.log)
-        .pipe(sourcemaps.write('./'))
-        // .pipe(uglify())
-        .pipe(gulp.dest('./public/js/app/build/'))
-        .pipe(browserSync.stream({
-            once: true
-        }));
-}
-
-gulp.task('bundle', function() {
-    return bundle();
-});
+var gulp    = require('gulp'),
+browserSync = require('browser-sync').create(),
+plumber     = require('gulp-plumber'),
+gutil       = require('gulp-util'),
+sass        = require('gulp-sass'),
+minifyCss   = require('gulp-minify-css'),
+uglify      = require('gulp-uglify'),
+sourcemaps  = require('gulp-sourcemaps'),
+watchify    = require('watchify'),
+browserify  = require('browserify'),
+source      = require('vinyl-source-stream'),
+buffer      = require('vinyl-buffer'), //Convert streaming vinyl to buffer for uglify
+bundler     = watchify(browserify('./public/js/main.js'), { debug: true}),
+mocha       = require('gulp-mocha'),
+notify      = require('gulp-notify'),
+rename      = require('gulp-rename'),
+del         = require('del'),
+requireDir  = require('require-dir');
 
 // compile js
 gulp.task('js', function(){
@@ -61,6 +32,7 @@ gulp.task('js', function(){
     }))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/dist/js'))
+    .pipe(notify({ message: 'js task complete'}));
 });
 
 // create a task that ensures the `js` task is complete before reloading browsers
@@ -70,18 +42,17 @@ gulp.task('js-watch', ['js'], browserSync.reload);
 gulp.task('styles', function() {
     gutil.log('compiling styles scss !!!!');
     return gulp.src('./public/sass/*.scss')
+        .pipe(sass({ outputStyle: 'expanded'})// expanded, nested, compressed
         .pipe(plumber())
-        .pipe(sass({
-            outputStyle: 'expanded' // expanded, nested, compressed
-        })
         .on('error', sass.logError))
-        .pipe(sourcemaps.init({
-            loadMaps: true
-        }))
+        .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sourcemaps.write('./'))
-        //.pipe(minifyCss())
         .pipe(gulp.dest('./public/dist/css'))
-        .pipe(browserSync.stream());
+        .pipe(rename({suffix: '.min'}))
+        .pipe(minifyCss())
+        .pipe(gulp.dest('./public/dist/css'))
+        .pipe(browserSync.stream())
+        .pipe(notify({message:'styles task complete'}));
 });
 
 // serve to launch browserSync and watch JS files
@@ -102,3 +73,20 @@ gulp.task('test', function() {
         // gulp-mocha needs filepaths so you can't have any plugins before it
         .pipe(mocha());
 });
+
+// clean dist directory for fresh build
+gulp.task('clean', function(){
+    return del(['public/dist']);
+});
+
+// compile scss and js
+gulp.task('default', ['clean'], function(){
+    gulp.start('styles', 'js');
+});
+
+
+/*
+* NEW ORGANISATION AND OPTIMIZATION FOR GULP
+*/
+// Require all tasks in gulp/tasks, including subfolders
+requireDir('./gulp/tasks', { recurse: true });
