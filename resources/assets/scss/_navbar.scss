@@ -1,0 +1,14 @@
+//
+// Navbar
+// --------------------------------------------------
+.navbar-top{
+    -webkit-box-shadow: 0 7px 12px -4px #ccc;
+    -moz-box-shadow: 0 7px 12px -4px #ccc;
+    box-shadow: 0 7px 12px -4px #ccc;
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+
+    .dropdown-menu{
+        border-radius: 0;
+    }
+}

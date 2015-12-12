@@ -1,0 +1,29 @@
+{
+    "js_path": "./resources/assets/js",
+    "scss_path": "./resources/assets/scss",
+    "css_dest": "css",
+    "js_dest": "js",
+
+    "public_path": "public/dist",
+
+    "vendor_path": "./src/vendor",
+    "precompiled_path": "./src/precompiled",
+    "img_path": "./src/img",
+    "fonts_path": "./src/fonts",
+    
+    "bower_path": "./bower_components",
+    "scss_sprite_path": "src/scss/sprite/built",
+    
+    "img_dest": "img",
+    "fonts_dest": "fonts",
+    "img_dest_relative_css": "../../img/built",
+    "browserSync": {
+        "status": true,
+        "server": true,
+        "mainFilesToWatch": [
+            "../project/www/index.html",
+            "./resources/views/**/*.blade.php"
+        ],
+        "proxy": "pollandco.com:8888"
+    }
+}
