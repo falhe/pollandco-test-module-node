@@ -2,23 +2,17 @@
 /* CUSTOM SASS VARIABLES */
 .form-control {
   border: 0;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
   box-shadow: none !important;
   box-sizing: border-box;
 }
 
 .form-control:focus {
   border-width: 2px;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
   box-shadow: none !important;
   box-sizing: border-box;
 }
 
 .navbar-top {
-  -webkit-box-shadow: 0 7px 12px -4px #ccc;
-  -moz-box-shadow: 0 7px 12px -4px #ccc;
   box-shadow: 0 7px 12px -4px #ccc;
   border-radius: 0 !important;
   margin-bottom: 0 !important;
@@ -42,8 +36,6 @@
 
 .panel {
   border: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
   box-shadow: none !important;
 }
 
@@ -112,15 +104,12 @@
 
 #content .form-search-users-container .search {
   height: 100px;
-  -webkit-border-radius: 0 !important;
-  -moz-border-radius: 0 !important;
   border-radius: 0 !important;
   font-size: 20px;
 }
 
 /*!
- * Import from Bower
- * Bootstrap v3.3.5 (http://getbootstrap.com)
+ * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
@@ -433,11 +422,11 @@ th {
 }
 
 .glyphicon-asterisk:before {
-  content: "\2a";
+  content: "\002a";
 }
 
 .glyphicon-plus:before {
-  content: "\2b";
+  content: "\002b";
 }
 
 .glyphicon-euro:before,
@@ -1482,15 +1471,11 @@ th {
 }
 
 * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
 *:before,
 *:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -1557,7 +1542,6 @@ img {
   border: 1px solid #ddd;
   border-radius: 15px;
   -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   display: inline-block;
   max-width: 100%;
@@ -3106,8 +3090,6 @@ label {
 }
 
 input[type="search"] {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -3160,17 +3142,14 @@ output {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 15px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
-  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 
 .form-control:focus {
   border-color: #47B39D;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(71, 179, 157, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(71, 179, 157, 0.6);
 }
 
@@ -3185,6 +3164,11 @@ output {
 
 .form-control::-webkit-input-placeholder {
   color: #999;
+}
+
+.form-control::-ms-expand {
+  border: 0;
+  background-color: transparent;
 }
 
 .form-control[disabled], .form-control[readonly],
@@ -3518,10 +3502,12 @@ select[multiple].input-lg,
 
 .has-success .form-control {
   border-color: #3c763d;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .has-success .form-control:focus {
   border-color: #2b542c;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168;
 }
 
 .has-success .input-group-addon {
@@ -3549,10 +3535,12 @@ select[multiple].input-lg,
 
 .has-warning .form-control {
   border-color: #8a6d3b;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .has-warning .form-control:focus {
   border-color: #66512c;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
 }
 
 .has-warning .input-group-addon {
@@ -3580,10 +3568,12 @@ select[multiple].input-lg,
 
 .has-error .form-control {
   border-color: #a94442;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .has-error .form-control:focus {
   border-color: #843534;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
 }
 
 .has-error .input-group-addon {
@@ -3704,7 +3694,7 @@ select[multiple].input-lg,
 
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
-    padding-top: 14.33333px;
+    padding-top: 11px;
     font-size: 18px;
   }
 }
@@ -3722,7 +3712,8 @@ select[multiple].input-lg,
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
-  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -3751,7 +3742,6 @@ select[multiple].input-lg,
 .btn:active, .btn.active {
   outline: 0;
   background-image: none;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
@@ -3760,7 +3750,6 @@ fieldset[disabled] .btn {
   cursor: not-allowed;
   opacity: 0.65;
   filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -3808,13 +3797,10 @@ fieldset[disabled] a.btn {
   background-image: none;
 }
 
-.btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled.focus, .btn-default.disabled:active, .btn-default.disabled.active, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled].focus, .btn-default[disabled]:active, .btn-default[disabled].active,
-fieldset[disabled] .btn-default,
+.btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled.focus, .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled].focus,
 fieldset[disabled] .btn-default:hover,
 fieldset[disabled] .btn-default:focus,
-fieldset[disabled] .btn-default.focus,
-fieldset[disabled] .btn-default:active,
-fieldset[disabled] .btn-default.active {
+fieldset[disabled] .btn-default.focus {
   background-color: #fff;
   border-color: #ccc;
 }
@@ -3863,13 +3849,10 @@ fieldset[disabled] .btn-default.active {
   background-image: none;
 }
 
-.btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active,
-fieldset[disabled] .btn-primary,
+.btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary:hover,
 fieldset[disabled] .btn-primary:focus,
-fieldset[disabled] .btn-primary.focus,
-fieldset[disabled] .btn-primary:active,
-fieldset[disabled] .btn-primary.active {
+fieldset[disabled] .btn-primary.focus {
   background-color: #47B39D;
   border-color: #40a18d;
 }
@@ -3918,13 +3901,10 @@ fieldset[disabled] .btn-primary.active {
   background-image: none;
 }
 
-.btn-success.disabled, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled.focus, .btn-success.disabled:active, .btn-success.disabled.active, .btn-success[disabled], .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled].focus, .btn-success[disabled]:active, .btn-success[disabled].active,
-fieldset[disabled] .btn-success,
+.btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled.focus, .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled].focus,
 fieldset[disabled] .btn-success:hover,
 fieldset[disabled] .btn-success:focus,
-fieldset[disabled] .btn-success.focus,
-fieldset[disabled] .btn-success:active,
-fieldset[disabled] .btn-success.active {
+fieldset[disabled] .btn-success.focus {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
@@ -3973,13 +3953,10 @@ fieldset[disabled] .btn-success.active {
   background-image: none;
 }
 
-.btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled.focus, .btn-info.disabled:active, .btn-info.disabled.active, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled].focus, .btn-info[disabled]:active, .btn-info[disabled].active,
-fieldset[disabled] .btn-info,
+.btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled.focus, .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled].focus,
 fieldset[disabled] .btn-info:hover,
 fieldset[disabled] .btn-info:focus,
-fieldset[disabled] .btn-info.focus,
-fieldset[disabled] .btn-info:active,
-fieldset[disabled] .btn-info.active {
+fieldset[disabled] .btn-info.focus {
   background-color: #5bc0de;
   border-color: #46b8da;
 }
@@ -4028,13 +4005,10 @@ fieldset[disabled] .btn-info.active {
   background-image: none;
 }
 
-.btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled.focus, .btn-warning.disabled:active, .btn-warning.disabled.active, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled].focus, .btn-warning[disabled]:active, .btn-warning[disabled].active,
-fieldset[disabled] .btn-warning,
+.btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled.focus, .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled].focus,
 fieldset[disabled] .btn-warning:hover,
 fieldset[disabled] .btn-warning:focus,
-fieldset[disabled] .btn-warning.focus,
-fieldset[disabled] .btn-warning:active,
-fieldset[disabled] .btn-warning.active {
+fieldset[disabled] .btn-warning.focus {
   background-color: #f0ad4e;
   border-color: #eea236;
 }
@@ -4083,13 +4057,10 @@ fieldset[disabled] .btn-warning.active {
   background-image: none;
 }
 
-.btn-danger.disabled, .btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled.focus, .btn-danger.disabled:active, .btn-danger.disabled.active, .btn-danger[disabled], .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled].focus, .btn-danger[disabled]:active, .btn-danger[disabled].active,
-fieldset[disabled] .btn-danger,
+.btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled.focus, .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled].focus,
 fieldset[disabled] .btn-danger:hover,
 fieldset[disabled] .btn-danger:focus,
-fieldset[disabled] .btn-danger.focus,
-fieldset[disabled] .btn-danger:active,
-fieldset[disabled] .btn-danger.active {
+fieldset[disabled] .btn-danger.focus {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
@@ -4108,7 +4079,6 @@ fieldset[disabled] .btn-danger.active {
 .btn-link, .btn-link:active, .btn-link.active, .btn-link[disabled],
 fieldset[disabled] .btn-link {
   background-color: transparent;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -4168,7 +4138,6 @@ input[type="button"].btn-block {
 .fade {
   opacity: 0;
   -webkit-transition: opacity 0.15s linear;
-  -o-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 
@@ -4242,7 +4211,6 @@ tbody.collapse.in {
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 15px;
-  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
 }
@@ -4468,12 +4436,10 @@ tbody.collapse.in {
 }
 
 .btn-group.open .dropdown-toggle {
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 
 .btn-group.open .dropdown-toggle.btn-link {
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -4526,14 +4492,16 @@ tbody.collapse.in {
 
 .btn-group-vertical > .btn:first-child:not(:last-child) {
   border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
 .btn-group-vertical > .btn:last-child:not(:first-child) {
-  border-bottom-left-radius: 15px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn {
@@ -4600,6 +4568,10 @@ tbody.collapse.in {
   float: left;
   width: 100%;
   margin-bottom: 0;
+}
+
+.input-group .form-control:focus {
+  z-index: 3;
 }
 
 .input-group-addon,
@@ -5152,7 +5124,6 @@ tbody.collapse.in {
   padding: 10px 15px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
   margin-top: 8px;
   margin-bottom: 8px;
@@ -5226,7 +5197,6 @@ tbody.collapse.in {
     margin-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    -webkit-box-shadow: none;
     box-shadow: none;
   }
 }
@@ -5552,7 +5522,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > a:hover, .pagination > li > a:focus,
 .pagination > li > span:hover,
 .pagination > li > span:focus {
-  z-index: 3;
+  z-index: 2;
   color: #317c6d;
   background-color: #eeeeee;
   border-color: #ddd;
@@ -5562,7 +5532,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .active > span,
 .pagination > .active > span:hover,
 .pagination > .active > span:focus {
-  z-index: 2;
+  z-index: 3;
   color: #fff;
   background-color: #47B39D;
   border-color: #47B39D;
@@ -5829,6 +5799,8 @@ a.badge:hover, a.badge:focus {
 .container .jumbotron,
 .container-fluid .jumbotron {
   border-radius: 6px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .jumbotron .container {
@@ -5860,7 +5832,6 @@ a.badge:hover, a.badge:focus {
   border: 1px solid #ddd;
   border-radius: 15px;
   -webkit-transition: border 0.2s ease-in-out;
-  -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
 }
 
@@ -6002,7 +5973,6 @@ a.thumbnail.active {
   margin-bottom: 20px;
   background-color: #f5f5f5;
   border-radius: 15px;
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -6015,17 +5985,14 @@ a.thumbnail.active {
   color: #fff;
   text-align: center;
   background-color: #47B39D;
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -webkit-transition: width 0.6s ease;
-  -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
 
 .progress-striped .progress-bar,
 .progress-bar-striped {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-size: 40px 40px;
 }
@@ -6033,7 +6000,6 @@ a.thumbnail.active {
 .progress.active .progress-bar,
 .progress-bar.active {
   -webkit-animation: progress-bar-stripes 2s linear infinite;
-  -o-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite;
 }
 
@@ -6043,7 +6009,6 @@ a.thumbnail.active {
 
 .progress-striped .progress-bar-success {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
@@ -6053,7 +6018,6 @@ a.thumbnail.active {
 
 .progress-striped .progress-bar-info {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
@@ -6063,7 +6027,6 @@ a.thumbnail.active {
 
 .progress-striped .progress-bar-warning {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
@@ -6073,7 +6036,6 @@ a.thumbnail.active {
 
 .progress-striped .progress-bar-danger {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
@@ -6360,7 +6322,6 @@ button.list-group-item-danger.active:focus {
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 15px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -6813,7 +6774,6 @@ button.list-group-item-danger.active:focus {
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
   border-radius: 15px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -6878,19 +6838,15 @@ button.close {
 
 .modal.fade .modal-dialog {
   -webkit-transform: translate(0, -25%);
-  -ms-transform: translate(0, -25%);
-  -o-transform: translate(0, -25%);
   transform: translate(0, -25%);
   -webkit-transition: -webkit-transform 0.3s ease-out;
-  -moz-transition: -moz-transform 0.3s ease-out;
-  -o-transition: -o-transform 0.3s ease-out;
+  transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 
 .modal.in .modal-dialog {
   -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
 
@@ -6911,7 +6867,6 @@ button.close {
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
   outline: 0;
@@ -6940,7 +6895,15 @@ button.close {
 .modal-header {
   padding: 15px;
   border-bottom: 1px solid #e5e5e5;
-  min-height: 16.42857px;
+}
+
+.modal-header:before, .modal-header:after {
+  content: " ";
+  display: table;
+}
+
+.modal-header:after {
+  clear: both;
 }
 
 .modal-header .close {
@@ -6999,7 +6962,6 @@ button.close {
     margin: 30px auto;
   }
   .modal-content {
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   }
   .modal-sm {
@@ -7172,7 +7134,6 @@ button.close {
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -7305,7 +7266,6 @@ button.close {
   display: none;
   position: relative;
   -webkit-transition: 0.6s ease-in-out left;
-  -o-transition: 0.6s ease-in-out left;
   transition: 0.6s ease-in-out left;
 }
 
@@ -7320,14 +7280,12 @@ button.close {
 @media all and (transform-3d), (-webkit-transform-3d) {
   .carousel-inner > .item {
     -webkit-transition: -webkit-transform 0.6s ease-in-out;
-    -moz-transition: -moz-transform 0.6s ease-in-out;
-    -o-transition: -o-transform 0.6s ease-in-out;
+    transition: -webkit-transform 0.6s ease-in-out;
     transition: transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
     -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-perspective: 1000px;
-    -moz-perspective: 1000px;
     perspective: 1000px;
   }
   .carousel-inner > .item.next, .carousel-inner > .item.active.right {
@@ -7397,11 +7355,11 @@ button.close {
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  background-color: transparent;
 }
 
 .carousel-control.left {
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
-  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
@@ -7411,7 +7369,6 @@ button.close {
   left: auto;
   right: 0;
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
@@ -7520,16 +7477,16 @@ button.close {
   .carousel-control .icon-next {
     width: 30px;
     height: 30px;
-    margin-top: -15px;
+    margin-top: -10px;
     font-size: 30px;
   }
   .carousel-control .glyphicon-chevron-left,
   .carousel-control .icon-prev {
-    margin-left: -15px;
+    margin-left: -10px;
   }
   .carousel-control .glyphicon-chevron-right,
   .carousel-control .icon-next {
-    margin-right: -15px;
+    margin-right: -10px;
   }
   .carousel-caption {
     left: 20%;
@@ -7844,8 +7801,6 @@ button.close {
 }
 
 * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 

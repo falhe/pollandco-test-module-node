@@ -49,8 +49,7 @@
         <script>
             var rootPath = '{{ url() }}';
         </script>
-        <script type="text/javascript" src="{{ asset('/js/vendor/jquery-1.11.3.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('/js/vendor/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('dist/js/vendor.js') }}"></script>
         <script type="text/javascript" src="{{ asset('dist/js/app.js') }}"></script>
     </body>
 </html>

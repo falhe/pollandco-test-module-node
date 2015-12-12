@@ -12,6 +12,7 @@ var $ = require('jquery'),
 
 
 (function(window, $, undefined) {
+    console.log('test browserify !!!!!!!');
     if (window.__backboneAgent) {
         window.__backboneAgent.handleBackbone(Backbone);
     }

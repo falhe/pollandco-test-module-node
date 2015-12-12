@@ -17,7 +17,8 @@
 	<![endif]-->
 </head>
 <body id="pollstar" class="pollstar">
-	<nav class="navbar navbar-top">
+
+ 	<nav class="navbar navbar-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">

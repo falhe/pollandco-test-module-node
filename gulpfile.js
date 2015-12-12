@@ -1,92 +1,224 @@
-var gulp    = require('gulp'),
-browserSync = require('browser-sync').create(),
-plumber     = require('gulp-plumber'),
-gutil       = require('gulp-util'),
-sass        = require('gulp-sass'),
-minifyCss   = require('gulp-minify-css'),
-uglify      = require('gulp-uglify'),
-sourcemaps  = require('gulp-sourcemaps'),
-watchify    = require('watchify'),
-browserify  = require('browserify'),
-source      = require('vinyl-source-stream'),
-buffer      = require('vinyl-buffer'), //Convert streaming vinyl to buffer for uglify
-bundler     = watchify(browserify('./public/js/main.js'), { debug: true}),
-mocha       = require('gulp-mocha'),
-notify      = require('gulp-notify'),
-rename      = require('gulp-rename'),
-del         = require('del'),
-requireDir  = require('require-dir');
+"use strict";
 
-// compile js
-gulp.task('js', function(){
-    gutil.log('compiling js browserify !!!!');
-    return browserify({
-        entries: './public/js/main.js',
-        debug: true
-    })
-    .bundle()
-    .pipe(source('app.js'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({
-        loadMaps: true
-    }))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./public/dist/js'))
-    .pipe(notify({ message: 'js task complete'}));
+var config = require('./config.json');
+
+var plugins = require('gulp-load-plugins')({
+	pattern: '*',
+	scope: ['devDependencies'],
+	camelize: true,
+	replaceString: /^gulp(-|\.)/,
+	rename: {
+		'main-bower-files': 'bowerParse',
+		'vinyl-source-stream': 'source',
+		'vinyl-buffer': 'buffer'
+	}
 });
 
-// create a task that ensures the `js` task is complete before reloading browsers
-gulp.task('js-watch', ['js'], browserSync.reload);
+var ENV = 'dev';
+var optionsUglifyDev = {
+	output: { // http://lisperator.net/uglifyjs/codegen
+		beautify: true,
+		comments: true
+	},
+	compress: false,
+	preserveComments: true,
+	mangle: false,
+	outSourceMap: true
+};
 
-// compile sass
-gulp.task('styles', function() {
-    gutil.log('compiling styles scss !!!!');
-    return gulp.src('./public/sass/*.scss')
-        .pipe(sass({ outputStyle: 'expanded'})// expanded, nested, compressed
-        .pipe(plumber())
-        .on('error', sass.logError))
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./public/dist/css'))
-        .pipe(rename({suffix: '.min'}))
-        .pipe(minifyCss())
-        .pipe(gulp.dest('./public/dist/css'))
-        .pipe(browserSync.stream())
-        .pipe(notify({message:'styles task complete'}));
+var optionsUglifyProd = {
+	output: {
+		beautify: false,
+		comments: false
+	},
+	compress: {
+		drop_console: true,
+		warnings: false
+	},
+	preserveComments: false,
+	mangle: true,
+	outSourceMap: false
+};
+
+//Clean destination folder
+plugins.gulp.task('clean', function() {
+	plugins.del([
+		config.public_path + '/**'
+	], {
+		force: true
+	});
 });
 
-// serve to launch browserSync and watch JS files
-gulp.task('serve', ['js', 'styles'], function(){
-    browserSync.init({
-        proxy: 'http://localhost/pollandco-test-module-node/public/'
-    });
-
-    gulp.watch('public/js/**/*.js', ['js-watch']);
-    gulp.watch('public/sass/*.scss', ['styles']);
-    gulp.watch('resources/views/{,layout/}/{,pages/}{,admin/}/{,auth/}/{,emails/}/{,errors/}/{,templates/}/{,users/}*.php').on('change', browserSync.reload);
+//JSHint
+plugins.gulp.task('jshint', function() {
+	return plugins.gulp.src(config.js_path + '/**/*.js')
+		.pipe(plugins.jshint())
+		.pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('test', function() {
-    return gulp.src('./test/*.js', {
-            read: false
-        })
-        // gulp-mocha needs filepaths so you can't have any plugins before it
-        .pipe(mocha());
+// plugins.gulp.task('compile:hbs', function() {
+// 	return plugins.gulp.src(config.js_path + '/**/*.hbs')
+// 		.pipe(plugins.handlebars())
+// 		.pipe(plugins.defineModule('amd'))
+// 		.pipe(plugins.gulp.dest(config.precompiled_path));
+// });
+
+//compile partials
+// plugins.gulp.task('compile:partials', function(){
+// 	plugins.gulp.src([ config.js_path + '/**/_*.hbs' ])
+// 		.pipe(plugins.handlebars())
+// 		.pipe(plugins.wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, Handlebars.template(<%= contents %>));', {}, {
+// 	      imports: {
+// 	        processPartialName: function(fileName) {
+// 	        	console.log('fileName ',fileName);
+// 	          // Strip the extension and the underscore 
+// 	          // Escape the output with JSON.stringify 
+// 	          return JSON.stringify(path.basename(fileName, '.js').substr(1));
+// 	        }
+// 	      }
+// 	    }))
+// 	    .pipe(plugins.concat('partials-test.js'))
+// 	    .pipe(plugins.gulp.dest(config.precompiled_path + '/partials'));
+// 	    console.log('dest ', config.precompiled_path + '/partials');
+
+// });
+
+
+plugins.gulp.task('scripts', function() {
+
+	var options;
+	options = {
+		debug: true,
+		paths: ['./node_modules']
+	};
+
+	plugins.hbsfy.configure({ extensions: ['hbs'] });
+
+	plugins.browserify(config.js_path + '/main.js', options)
+		.transform(plugins.hbsfy)
+		.bundle()
+		.pipe(plugins.source('app.js'))
+		.pipe(plugins.buffer())
+		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.sourcemaps.write('./'))
+		.pipe(plugins.gulp.dest(config.public_path + '/' + config.js_dest))
+
+	plugins.gulp.src([
+			config.js_path + '/vendor/jquery-2.1.4.min.js',
+			config.js_path + '/vendor/bootstrap.min.js',
+			config.js_path + '/vendor/moment-2.10.6-min.js'
+		])
+		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.concat('vendor.js'))
+		.pipe(plugins.uglify(plugins.if(ENV == 'dev', optionsUglifyDev, optionsUglifyProd))).on('error', errorHandler)
+		.pipe(plugins.if(ENV == 'dev', plugins.sourcemaps.write('./')))
+		.pipe(plugins.gulp.dest(config.public_path + '/' + config.js_dest))
+		.pipe(plugins.if(ENV == 'dev', plugins.browserSync.stream()));
+
+})
+
+//Task Styles:dev
+plugins.gulp.task('styles:dev', function() {
+	return plugins.gulp.src(config.scss_path + '/**/*.scss')
+		.pipe(plugins.plumber())
+		.pipe(plugins.sourcemaps.init()) // Sourcemap init
+		.pipe(plugins.sass({
+			outputStyle: 'expanded'
+		})).on('error', plugins.sass.logError)
+		.pipe(plugins.autoprefixer())
+		.pipe(plugins.sourcemaps.write('./'))
+		.pipe(plugins.gulp.dest(config.public_path + '/' + config.css_dest))
+		.pipe(plugins.browserSync.stream());
 });
 
-// clean dist directory for fresh build
-gulp.task('clean', function(){
-    return del(['public/dist']);
+//Task Styles:prod
+plugins.gulp.task('styles:prod', function() {
+	return plugins.gulp.src(config.scss_path + '/global.scss')
+		.pipe(plugins.plumber())
+		.pipe(plugins.sass({
+			outputStyle: 'compressed'
+		}))
+		.pipe(plugins.gulp.dest(config.public_path + config.css_dest)); // Save CSS result in destination folder
 });
 
-// compile scss and js
-gulp.task('default', ['clean'], function(){
-    gulp.start('styles', 'js');
+// Task Copy img fonts
+plugins.gulp.task('copyassets', function(){
+
+	plugins.gulp.src([
+		config.img_path + '/**',
+		'!' + config.img_path + '/{svg,svg/**}'
+		])
+	.pipe(plugins.gulp.dest(config.public_path + config.img_dest))
+
+	plugins.gulp.src([
+		config.fonts_path + '/**'
+		])
+	.pipe(plugins.gulp.dest(config.public_path + config.fonts_dest))
+
 });
 
+//Task Compile:dev
+plugins.gulp.task('compile:dev', function() {
 
-/*
-* NEW ORGANISATION AND OPTIMIZATION FOR GULP
-*/
-// Require all tasks in gulp/tasks, including subfolders
-requireDir('./gulp/tasks', { recurse: true });
+	if (config.browserSync.status) {
+		plugins.browserSync({
+			//proxy: "pollandco.com:8888"
+			proxy: config.browserSync.proxy
+		});
+	}
+
+	plugins.runSequence(
+		'clean',
+		'gitinfo',
+		['styles:dev','jshint', 'scripts', 'copyassets'],
+		function() {
+			plugins.util.log('Ready for dev!');
+			plugins.gulp.watch(config.scss_path + '/**/*.scss', ['styles:dev']);
+			plugins.gulp.watch(config.js_path + '/**/*.hbs', ['jshint', 'scripts']);
+			plugins.gulp.watch(config.js_path + '/**/*.js', ['jshint', 'scripts']);
+
+			if( config.browserSync.status)
+				plugins.gulp.watch(config.browserSync.mainFilesToWatch).on('change', plugins.browserSync.reload);
+		}
+	)
+
+})
+
+// Task Compile:prod
+plugins.gulp.task('compile:prod', function() {
+	plugins.runSequence(
+		'clean',
+		'gitinfo',
+		['styles:prod', 'jshint', 'scripts', 'copyassets'],
+		function() {
+			plugins.util.log('ok ready for prod');
+		}
+	)
+});
+
+//Task : Default
+plugins.gulp.task('default', function() {
+	var mode = process.argv.slice(2)[0].split('--')[1];
+
+	if (mode == 'dev') {
+		ENV = 'dev';
+		plugins.gulp.start('compile:dev');
+	} else if (mode == 'prod') {
+		ENV = 'prod';
+		plugins.gulp.start('compile:prod');
+	}
+
+});
+
+// Handle error
+function errorHandler(error) {
+	console.log(error.toString());
+	this.emit('end');
+}
+
+//Task Gitinfo
+plugins.gulp.task('gitinfo', function(){
+	plugins.gitRev.branch(function(str){
+		console.log('branch -> ', str);
+	})
+});
