@@ -9,7 +9,7 @@ var BookListView = Backbone.View.extend({
 
     collection: new UserList(),
 
-    initialize: function() {
+    initialize: function() { 
         _.bindAll(this, 'render', 'processUser');
         this.collection.fetch({
             success: this.render

@@ -2,7 +2,7 @@ var Backbone = require('backbone'),
     _ = require('underscore'),
     UserTemplate = require('../templates/app.user-view.hbs');
 
-var BookListView = Backbone.View.extend({
+var BookView = Backbone.View.extend({
 
     template: UserTemplate,
 
@@ -26,4 +26,4 @@ var BookListView = Backbone.View.extend({
     }
 });
 
-module.exports = BookListView;
+module.exports = BookView;

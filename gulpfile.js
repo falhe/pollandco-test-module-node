@@ -85,6 +85,7 @@ plugins.gulp.task('jshint', function() {
 
 
 plugins.gulp.task('scripts', function() {
+	console.log('scripts !!!!!!!!!');
 
 	var options;
 	options = {
@@ -92,16 +93,32 @@ plugins.gulp.task('scripts', function() {
 		paths: ['./node_modules']
 	};
 
-	plugins.hbsfy.configure({ extensions: ['hbs'] });
+	plugins.hbsfy.configure({ extensions: ['.hbs'] });
 
 	plugins.browserify(config.js_path + '/main.js', options)
 		.transform(plugins.hbsfy)
 		.bundle()
 		.pipe(plugins.source('app.js'))
 		.pipe(plugins.buffer())
-		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.sourcemaps.init({ loadMaps: true }))
 		.pipe(plugins.sourcemaps.write('./'))
 		.pipe(plugins.gulp.dest(config.public_path + '/' + config.js_dest))
+
+	// set up the browserify instance on a task basis
+  // var b = plugins.browserify({
+  //   entries: config.js_path + '/main.js',
+  //   debug: true
+  // });
+
+  // return b.bundle()
+  //   .pipe(plugins.source('app.js'))
+  //   .pipe(plugins.buffer())
+  //   .pipe(plugins.sourcemaps.init({loadMaps: true}))
+  //       // Add transformation tasks to the pipeline here.
+  //       //.pipe(uglify())
+  //       .on('error', plugins.util.log)
+  //   .pipe(plugins.sourcemaps.write('./'))
+  //   .pipe(plugins.gulp.dest( config.public_path + '/' + config.js_dest ));
 
 	plugins.gulp.src([
 			config.js_path + '/vendor/jquery-2.1.4.min.js',
@@ -160,12 +177,12 @@ plugins.gulp.task('copyassets', function(){
 //Task Compile:dev
 plugins.gulp.task('compile:dev', function() {
 
-	if (config.browserSync.status) {
-		plugins.browserSync({
-			//proxy: "pollandco.com:8888"
-			proxy: config.browserSync.proxy
-		});
-	}
+	// if (config.browserSync.status) {
+	// 	plugins.browserSync({
+	// 		//proxy: "pollandco.com:8888"
+	// 		proxy: config.browserSync.proxy
+	// 	});
+	// }
 
 	plugins.runSequence(
 		'clean',
@@ -177,8 +194,8 @@ plugins.gulp.task('compile:dev', function() {
 			plugins.gulp.watch(config.js_path + '/**/*.hbs', ['jshint', 'scripts']);
 			plugins.gulp.watch(config.js_path + '/**/*.js', ['jshint', 'scripts']);
 
-			if( config.browserSync.status)
-				plugins.gulp.watch(config.browserSync.mainFilesToWatch).on('change', plugins.browserSync.reload);
+			// if( config.browserSync.status)
+			// 	plugins.gulp.watch(config.browserSync.mainFilesToWatch).on('change', plugins.browserSync.reload);
 		}
 	)
 

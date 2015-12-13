@@ -1,4 +1,4 @@
-var $ = require('jquery'),
+var $ = require('jquery')(window),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
     SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
