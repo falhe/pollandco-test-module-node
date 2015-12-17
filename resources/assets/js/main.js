@@ -40,7 +40,7 @@ var $ = require('jquery')(window),
     //Instantiate router
     Backbone.history.start({
         pushState: true,
-        root: 'admin/'
+        root: 'poll/public/admin/' // TODO trouver un moyen d ameliorer ça pour que ça s'adapte à tous types d@
     });
 
 })(window, $);

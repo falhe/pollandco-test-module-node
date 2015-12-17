@@ -26,8 +26,8 @@
         <div class="central">
 
             {{-- SIDEBAR --}}
-            <div class="sidebar-wrapper">
-                @include('layout.sidebar')
+            <div class="sidebar-wrapper" id="sidebar-wrapper">
+                {{-- @include('layout.sidebar') --}}
             </div>
 
             {{-- CONTENT CENTRAL --}}

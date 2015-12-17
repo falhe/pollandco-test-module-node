@@ -122,8 +122,8 @@ plugins.gulp.task('scripts', function() {
 
 	plugins.gulp.src([
 			config.js_path + '/vendor/jquery-2.1.4.min.js',
-			config.js_path + '/vendor/bootstrap.min.js',
-			config.js_path + '/vendor/moment-2.10.6-min.js'
+			config.js_path + '/vendor/bootstrap.min.js'
+			//config.js_path + '/vendor/moment-2.10.6-min.js'
 		])
 		.pipe(plugins.sourcemaps.init())
 		.pipe(plugins.concat('vendor.js'))

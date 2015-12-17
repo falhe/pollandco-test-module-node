@@ -1,0 +1,12 @@
+<ul class="nav og nav-stacked" id="sidebar">
+    {{#each menu }}
+        <li class=""><a href="{{link}}">{{title}}</a></li>
+        {{#if submenu }}
+            <ul>
+                {{#each this.submenu }}
+                    <li class="{{class}}"><a href="{{link}}">{{title}}</a></li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    {{/each}}
+</ul>
