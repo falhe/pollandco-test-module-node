@@ -1,8 +1,8 @@
-<ul class="nav og nav-stacked" id="sidebar">
+<ul class="nav nav-stacked menu" id="sidebar">
     {{#each menu }}
-        <li class=""><a href="{{link}}">{{title}}</a></li>
+        <li class="tp "><a href="{{link}}">{{title}} <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a></li>
         {{#if submenu }}
-            <ul>
+            <ul class="submenu">
                 {{#each this.submenu }}
                     <li class="{{class}}"><a href="{{link}}">{{title}}</a></li>
                 {{/each}}

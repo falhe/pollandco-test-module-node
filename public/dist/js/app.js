@@ -13438,28 +13438,41 @@ var SearchUsersCollection = Backbone.Collection.extend({
 });
 
 module.exports = SearchUsersCollection;
-},{"../models/app.user.model":18,"backbone":1}],14:[function(require,module,exports){
+},{"../models/app.user.model":23,"backbone":1}],14:[function(require,module,exports){
 var Backbone = require('backbone');
 
 var User = Backbone.Model.extend({
     defaults: {
         'menu': [{
             'title': 'Utilisateur',
-            'link': 'link',
+            'link': 'null',
             'class': 'class',
             'submenu': [{
+                'title': 'Liste de tous les Utilisateurs',
+                'link': 'listuser',
+                'class': 'list'
+            },{
                 'title': 'Ajouter un Utilisateur',
-                'link': 'link',
-                'class': 'class'
+                'link': 'createuser',
+                'class': 'create'
             },{
                 'title': 'Supprimer un Utilisateur',
-                'link': 'link',
-                'class': 'class'
+                'link': 'deleteuser',
+                'class': 'delete'
             }]
         }, {
             'title': 'Administrateur',
             'class': 'class',
             'link': 'link',
+            'submenu': [{
+                'title': 'Ajouter un admin',
+                'link': 'createuser',
+                'class': 'create'
+            },{
+                'title': 'Supprimer un admin',
+                'link': 'deleteuser',
+                'class': 'delete'
+            }]
         }]
     }
 });
@@ -13471,16 +13484,16 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
     var stack1, helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
-  return "        <li class=\"\"><a href=\""
+  return "        <li class=\"tp \"><a href=\""
     + alias3(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"link","hash":{},"data":data}) : helper)))
     + "\">"
     + alias3(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"title","hash":{},"data":data}) : helper)))
-    + "</a></li>\r\n"
+    + " <span class=\"glyphicon glyphicon-plus pull-right\" aria-hidden=\"true\"></span></a></li>\r\n"
     + ((stack1 = helpers['if'].call(depth0,(depth0 != null ? depth0.submenu : depth0),{"name":"if","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "");
 },"2":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "            <ul>\r\n"
+  return "            <ul class=\"submenu\">\r\n"
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.submenu : depth0),{"name":"each","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "            </ul>\r\n";
 },"3":function(depth0,helpers,partials,data) {
@@ -13496,7 +13509,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "<ul class=\"nav og nav-stacked\" id=\"sidebar\">\r\n"
+  return "<ul class=\"nav nav-stacked menu\" id=\"sidebar\">\r\n"
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.menu : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "</ul>";
 },"useData":true});
@@ -13519,17 +13532,94 @@ var BaseView = Backbone.View.extend({
 
     type: 'sidebar_view',
 
-    tagName: 'ul',
-
-    className: 'nav og nav-stacked',
-
     model: new sidebarModel(),
 
     events: {
+        'click .tp': 'openSubmenu',
+        'click a': 'navigationHandler'
     },
 
     initialize: function() {
         console.log('sidebar view ', this);
+        _.bindAll(this, 'render', 'openSubmenu', 'navigationHandler');
+        this.render();
+    },
+
+    render: function() {
+        var compiledTemplate = this.template(this.model.toJSON());
+        this.$el.html(compiledTemplate);
+        return this;
+    },
+
+    openSubmenu: function(event) {
+        event.preventDefault();
+        $(event.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus').toggleClass('glyphicon-minus');
+        $(event.currentTarget).next('.submenu').toggleClass('hide');
+    },
+
+    navigationHandler: function(event) {
+        event.preventDefault();
+        var href = $(event.currentTarget).attr('href');
+        if (href !== 'null') {
+            app.router.navigate(href, {
+                trigger: true
+            });
+        }
+    }
+});
+
+module.exports = BaseView;
+},{"../model/app.sidebar.model":14,"../template/app.sidebar.hbs":15,"backbone":1,"underscore":12}],17:[function(require,module,exports){
+var Backbone = require('backbone');
+
+var User = Backbone.Model.extend({
+    defaults: {
+        
+    }
+});
+
+module.exports = User;
+},{"backbone":1}],18:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<h1>Ajouter un utilisateur</h1>";
+},"useData":true});
+
+},{"hbsfy/runtime":10}],19:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<h1>Liste de tous les utilisateurs</h1>";
+},"useData":true});
+
+},{"hbsfy/runtime":10}],20:[function(require,module,exports){
+/*
+    Template: Create user
+    url: admin/createuser
+*/
+
+var Backbone = require('backbone'),
+    _ = require('underscore');
+var userModel = require('../model/app.createuser.model');
+var createUserViewTemplate = require('../template/app.createuser.hbs');
+
+var createuserView = Backbone.View.extend({
+
+    el: '#content-main',
+
+    template: createUserViewTemplate,
+
+    type: 'createuser_view',
+
+    model: new userModel(),
+
+    events: {
+
+    },
+
+    initialize: function() {
+        console.log(this);
         _.bindAll(this, 'render');
         this.render();
     },
@@ -13537,11 +13627,51 @@ var BaseView = Backbone.View.extend({
     render: function() {
         var compiledTemplate = this.template(this.model.toJSON());
         this.$el.html(compiledTemplate);
+        return this;
     }
 });
 
-module.exports = BaseView;
-},{"../model/app.sidebar.model":14,"../template/app.sidebar.hbs":15,"backbone":1,"underscore":12}],17:[function(require,module,exports){
+module.exports = createuserView;
+},{"../model/app.createuser.model":17,"../template/app.createuser.hbs":18,"backbone":1,"underscore":12}],21:[function(require,module,exports){
+/*
+    Template: List of all users
+    url: admin/listuser
+*/
+
+var Backbone = require('backbone'),
+    _ = require('underscore');
+var userModel = require('../model/app.createuser.model');
+var createUserViewTemplate = require('../template/app.listuser.hbs');
+
+var createuserView = Backbone.View.extend({
+
+    el: '#content-main',
+
+    template: createUserViewTemplate,
+
+    type: 'createuser_view',
+
+    model: new userModel(),
+
+    events: {
+
+    },
+
+    initialize: function() {
+        console.log(this);
+        _.bindAll(this, 'render');
+        this.render();
+    },
+
+    render: function() {
+        var compiledTemplate = this.template(this.model.toJSON());
+        this.$el.html(compiledTemplate);
+        return this;
+    }
+});
+
+module.exports = createuserView;
+},{"../model/app.createuser.model":17,"../template/app.listuser.hbs":19,"backbone":1,"underscore":12}],22:[function(require,module,exports){
 var _ = require('underscore');
 var Router = require('../router/app.router');
 
@@ -13566,7 +13696,7 @@ var Controller = (function() {
 })();
 
 module.exports = Controller;
-},{"../router/app.router":19,"underscore":12}],18:[function(require,module,exports){
+},{"../router/app.router":24,"underscore":12}],23:[function(require,module,exports){
 var Backbone = require('backbone');
 
 var User = Backbone.Model.extend({
@@ -13587,67 +13717,76 @@ var User = Backbone.Model.extend({
 });
 
 module.exports = User;
-},{"backbone":1}],19:[function(require,module,exports){
-//"use strict";
+},{"backbone":1}],24:[function(require,module,exports){
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('underscore');
+var baseView = require('../views/app.base.view');
+var searchUsersList = require('../views/app.searchusers-list.view');
+var searchUsers = require('../views/app.searchuser.view');
+var test = require('../views/app.toto.view');
+var sidebarView = require('../components/sidebar/view/app.sidebar.view');
+var listuserView = require('../components/users/view/app.listuser.view');
+var createuserView = require('../components/users/view/app.createuser.view');
 
 
+//FOR TEST
+//TODO create rooter with real routes
+var Router = Backbone.Router.extend({
 
+    whereami: null,
 
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-    var _ = require('underscore');
-    var baseView = require('../views/app.base.view');
-    var searchUsersList = require('../views/app.searchusers-list.view');
-    var searchUsers = require('../views/app.searchuser.view');
-    var test = require('../views/app.toto.view');
-    var sidebarView = require('../components/sidebar/view/app.sidebar.view');
+    initialize: function() {
+        //_.bindAll(this, 'routes', 'dashboard');
+        console.log("[Router]:init");
+    },
 
-    //FOR TEST
-    //TODO create rooter with real routes
-    var Router = Backbone.Router.extend({
+    routes: {
+        "help": "help", // #help
+        "search/:query": "search", // #search/kiwis
+        "search/:query/p:page": "search", // #search/kiwis/p7
+        "gestion_points": "gestion_points",
+        "dashboard/:id": "dashboard",
+        "listuser": "listuser",
+        "createuser": "createuser",
+        "deleteuser": "deleteuser"
+    },
 
-        whereami: null,
+    dashboard: function() {
+        console.log('dashboard');
+    },
 
-        initialize: function() {
-            //_.bindAll(this, 'routes', 'dashboard');
-            console.log("[Router]:init");
-        },
+    help: function() {
+        console.log("help help");
+        $('body').find('.contents content-wrapper').html('help');
+    },
 
-        routes: {
-            "help": "help", // #help
-            "search/:query": "search", // #search/kiwis
-            "search/:query/p:page": "search", // #search/kiwis/p7
-            "gestion_points": "gestion_points",
-            "dashboard/:id": "dashboard"
-        },
+    search: function(query, page) {
+        console.log("search");
+    },
 
-        dashboard: function() {
-            console.log('dashboard');
-            //var Aaa = new test();
-            var Toto = new searchUsersList();
-            //console.log('aaa :', Aaa);
-            var sidebar = new sidebarView();
-            //debugger;
-        },
+    gestion_points: function() {
+        console.log("gestion_points");
+    },
 
-        help: function() {
-            console.log("help help");
-            $('body').find('.contents content-wrapper').html('help');
-        },
+    listuser: function(){
+        console.log('listuser');
+        new listuserView();
+    },
 
-        search: function(query, page) {
-            console.log("search");
-        },
+    createuser: function(){
+        console.log('createuser');
+        var createuser = new createuserView();
+    },
 
-        gestion_points: function() {
-            console.log("gestion_points");
-        }
+    deleteuser: function(){
+        console.log('deleteuser');
+    }
 
-    });
+});
 
-    module.exports = Router;
-
-},{"../components/sidebar/view/app.sidebar.view":16,"../views/app.base.view":21,"../views/app.searchuser.view":22,"../views/app.searchusers-list.view":23,"../views/app.toto.view":24,"backbone":1,"jquery":11,"underscore":12}],20:[function(require,module,exports){
+module.exports = Router;
+},{"../components/sidebar/view/app.sidebar.view":16,"../components/users/view/app.createuser.view":20,"../components/users/view/app.listuser.view":21,"../views/app.base.view":26,"../views/app.searchuser.view":27,"../views/app.searchusers-list.view":28,"../views/app.toto.view":29,"backbone":1,"jquery":11,"underscore":12}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -13670,7 +13809,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</td>";
 },"useData":true});
 
-},{"hbsfy/runtime":10}],21:[function(require,module,exports){
+},{"hbsfy/runtime":10}],26:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore');
 
@@ -13697,7 +13836,7 @@ var BaseView = Backbone.View.extend({
 });
 
 module.exports = BaseView;
-},{"backbone":1,"underscore":12}],22:[function(require,module,exports){
+},{"backbone":1,"underscore":12}],27:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserTemplate = require('../templates/app.user-view.hbs');
@@ -13727,7 +13866,7 @@ var BookView = Backbone.View.extend({
 });
 
 module.exports = BookView;
-},{"../templates/app.user-view.hbs":20,"backbone":1,"underscore":12}],23:[function(require,module,exports){
+},{"../templates/app.user-view.hbs":25,"backbone":1,"underscore":12}],28:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserList = require('../collections/app.searchusers.collection'),
@@ -13762,7 +13901,7 @@ var BookListView = Backbone.View.extend({
 });
 
 module.exports = BookListView;
-},{"../collections/app.searchusers.collection":13,"./app.searchuser.view":22,"backbone":1,"underscore":12}],24:[function(require,module,exports){
+},{"../collections/app.searchusers.collection":13,"./app.searchuser.view":27,"backbone":1,"underscore":12}],29:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore');
 
@@ -13789,19 +13928,14 @@ var tototo = Backbone.View.extend({
 });
 
 module.exports = tototo;
-},{"backbone":1,"underscore":12}],25:[function(require,module,exports){
+},{"backbone":1,"underscore":12}],30:[function(require,module,exports){
 var $ = require('jquery')(window),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
     SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
     SearchUsersListView = require('./app/views/app.searchusers-list.view'),
-    Router = require('./app/router/app.router');
-// PubSub = require('./pubsub'),
-// Controller = require('./controllers/app.controller'),
-// BookListView = require('./views/app.book-list.view'),
-// PanierListView = require('./views/app.panier-list.view'),
-// PrixPanierView = require('./views/app.prix-panier.view');
-
+    Router = require('./app/router/app.router'),
+    sidebarView = require('./app/components/sidebar/view/app.sidebar.view');
 
 (function(window, $, undefined) {
     if (window.__backboneAgent) {
@@ -13825,10 +13959,8 @@ var $ = require('jquery')(window),
 
     // //INSTANTIATE VIEWS
     app.SearchUsersList = new SearchUsersListView();
-    // app.bookListView = new BookListView();
-    // app.panierListView = new PanierListView();
-    // app.prixPanierView = new PrixPanierView();
-
+    app.sidebar = new sidebarView();
+    
     //Instantiate router
     Backbone.history.start({
         pushState: true,
@@ -13836,7 +13968,7 @@ var $ = require('jquery')(window),
     });
 
 })(window, $);
-},{"./app/collections/app.searchusers.collection":13,"./app/controllers/app.controller":17,"./app/router/app.router":19,"./app/views/app.searchusers-list.view":23,"backbone":1,"jquery":11}]},{},[25])
+},{"./app/collections/app.searchusers.collection":13,"./app/components/sidebar/view/app.sidebar.view":16,"./app/controllers/app.controller":22,"./app/router/app.router":24,"./app/views/app.searchusers-list.view":28,"backbone":1,"jquery":11}]},{},[30])
 
 
 //# sourceMappingURL=app.js.map

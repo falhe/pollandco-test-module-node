@@ -2,10 +2,11 @@
 // Sidebar
 // --------------------------------------------------
 #sidebar{
-    position: fixed;
+    //position: fixed;
     top: 55px;
     color: $sidebar-text-color;
     margin-top: 30px;
+    width: 100%;
 
     .nav {
         margin-bottom: 0;
@@ -71,6 +72,22 @@
         // See https://github.com/h5bp/html5-boilerplate/issues/984#issuecomment-3985989
         > li > a > img {
             max-width: none;
+        }
+    }
+
+    .submenu{
+        list-style: none;
+        font-size: 12px;
+
+        > li > a {
+            display: block;
+            padding: 10px 0;
+            color: #fff;
+
+            &:hover{
+                text-decoration: none;
+                color: $brand-primary;
+            }
         }
     }
 }

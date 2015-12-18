@@ -4,21 +4,34 @@ var User = Backbone.Model.extend({
     defaults: {
         'menu': [{
             'title': 'Utilisateur',
-            'link': 'link',
+            'link': 'null',
             'class': 'class',
             'submenu': [{
+                'title': 'Liste de tous les Utilisateurs',
+                'link': 'listuser',
+                'class': 'list'
+            },{
                 'title': 'Ajouter un Utilisateur',
-                'link': 'link',
-                'class': 'class'
+                'link': 'createuser',
+                'class': 'create'
             },{
                 'title': 'Supprimer un Utilisateur',
-                'link': 'link',
-                'class': 'class'
+                'link': 'deleteuser',
+                'class': 'delete'
             }]
         }, {
             'title': 'Administrateur',
             'class': 'class',
             'link': 'link',
+            'submenu': [{
+                'title': 'Ajouter un admin',
+                'link': 'createuser',
+                'class': 'create'
+            },{
+                'title': 'Supprimer un admin',
+                'link': 'deleteuser',
+                'class': 'delete'
+            }]
         }]
     }
 });

@@ -3,13 +3,8 @@ var $ = require('jquery')(window),
     Controller = require('./app/controllers/app.controller'),
     SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
     SearchUsersListView = require('./app/views/app.searchusers-list.view'),
-    Router = require('./app/router/app.router');
-// PubSub = require('./pubsub'),
-// Controller = require('./controllers/app.controller'),
-// BookListView = require('./views/app.book-list.view'),
-// PanierListView = require('./views/app.panier-list.view'),
-// PrixPanierView = require('./views/app.prix-panier.view');
-
+    Router = require('./app/router/app.router'),
+    sidebarView = require('./app/components/sidebar/view/app.sidebar.view');
 
 (function(window, $, undefined) {
     if (window.__backboneAgent) {
@@ -33,10 +28,8 @@ var $ = require('jquery')(window),
 
     // //INSTANTIATE VIEWS
     app.SearchUsersList = new SearchUsersListView();
-    // app.bookListView = new BookListView();
-    // app.panierListView = new PanierListView();
-    // app.prixPanierView = new PrixPanierView();
-
+    app.sidebar = new sidebarView();
+    
     //Instantiate router
     Backbone.history.start({
         pushState: true,

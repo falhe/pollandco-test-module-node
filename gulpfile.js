@@ -132,17 +132,17 @@ plugins.gulp.task('scripts', function() {
 		.pipe(plugins.gulp.dest(config.public_path + '/' + config.js_dest))
 		.pipe(plugins.if(ENV == 'dev', plugins.browserSync.stream()));
 
-})
+});
 
 //Task Styles:dev
 plugins.gulp.task('styles:dev', function() {
 	return plugins.gulp.src(config.scss_path + '/**/*.scss')
 		.pipe(plugins.plumber())
-		.pipe(plugins.sourcemaps.init()) // Sourcemap init
 		.pipe(plugins.sass({
 			outputStyle: 'expanded'
 		})).on('error', plugins.sass.logError)
 		.pipe(plugins.autoprefixer())
+		.pipe(plugins.sourcemaps.init()) // Sourcemap init
 		.pipe(plugins.sourcemaps.write('./'))
 		.pipe(plugins.gulp.dest(config.public_path + '/' + config.css_dest))
 		.pipe(plugins.browserSync.stream());
@@ -170,7 +170,7 @@ plugins.gulp.task('copyassets', function(){
 	plugins.gulp.src([
 		config.fonts_path + '/**'
 		])
-	.pipe(plugins.gulp.dest(config.public_path + config.fonts_dest))
+	.pipe(plugins.gulp.dest(config.public_path + '/' + config.fonts_dest))
 
 });
 
@@ -187,7 +187,8 @@ plugins.gulp.task('compile:dev', function() {
 	plugins.runSequence(
 		'clean',
 		'gitinfo',
-		['styles:dev','jshint', 'scripts', 'copyassets'],
+		'copyassets',
+		['styles:dev','jshint', 'scripts'],
 		function() {
 			plugins.util.log('Ready for dev!');
 			plugins.gulp.watch(config.scss_path + '/**/*.scss', ['styles:dev']);

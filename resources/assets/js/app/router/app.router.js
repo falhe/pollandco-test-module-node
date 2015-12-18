@@ -1,58 +1,68 @@
-//"use strict";
+var $ = require('jquery');
+var Backbone = require('backbone');
+var _ = require('underscore');
+var baseView = require('../views/app.base.view');
+var searchUsersList = require('../views/app.searchusers-list.view');
+var searchUsers = require('../views/app.searchuser.view');
+var test = require('../views/app.toto.view');
+var sidebarView = require('../components/sidebar/view/app.sidebar.view');
+var listuserView = require('../components/users/view/app.listuser.view');
+var createuserView = require('../components/users/view/app.createuser.view');
 
 
+//FOR TEST
+//TODO create rooter with real routes
+var Router = Backbone.Router.extend({
 
+    whereami: null,
 
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-    var _ = require('underscore');
-    var baseView = require('../views/app.base.view');
-    var searchUsersList = require('../views/app.searchusers-list.view');
-    var searchUsers = require('../views/app.searchuser.view');
-    var test = require('../views/app.toto.view');
-    var sidebarView = require('../components/sidebar/view/app.sidebar.view');
+    initialize: function() {
+        //_.bindAll(this, 'routes', 'dashboard');
+        console.log("[Router]:init");
+    },
 
-    //FOR TEST
-    //TODO create rooter with real routes
-    var Router = Backbone.Router.extend({
+    routes: {
+        "help": "help", // #help
+        "search/:query": "search", // #search/kiwis
+        "search/:query/p:page": "search", // #search/kiwis/p7
+        "gestion_points": "gestion_points",
+        "dashboard/:id": "dashboard",
+        "listuser": "listuser",
+        "createuser": "createuser",
+        "deleteuser": "deleteuser"
+    },
 
-        whereami: null,
+    dashboard: function() {
+        console.log('dashboard');
+    },
 
-        initialize: function() {
-            //_.bindAll(this, 'routes', 'dashboard');
-            console.log("[Router]:init");
-        },
+    help: function() {
+        console.log("help help");
+        $('body').find('.contents content-wrapper').html('help');
+    },
 
-        routes: {
-            "help": "help", // #help
-            "search/:query": "search", // #search/kiwis
-            "search/:query/p:page": "search", // #search/kiwis/p7
-            "gestion_points": "gestion_points",
-            "dashboard/:id": "dashboard"
-        },
+    search: function(query, page) {
+        console.log("search");
+    },
 
-        dashboard: function() {
-            console.log('dashboard');
-            //var Aaa = new test();
-            var Toto = new searchUsersList();
-            //console.log('aaa :', Aaa);
-            var sidebar = new sidebarView();
-            //debugger;
-        },
+    gestion_points: function() {
+        console.log("gestion_points");
+    },
 
-        help: function() {
-            console.log("help help");
-            $('body').find('.contents content-wrapper').html('help');
-        },
+    listuser: function(){
+        console.log('listuser');
+        new listuserView();
+    },
 
-        search: function(query, page) {
-            console.log("search");
-        },
+    createuser: function(){
+        console.log('createuser');
+        var createuser = new createuserView();
+    },
 
-        gestion_points: function() {
-            console.log("gestion_points");
-        }
+    deleteuser: function(){
+        console.log('deleteuser');
+    }
 
-    });
+});
 
-    module.exports = Router;
+module.exports = Router;

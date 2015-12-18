@@ -9,13 +9,13 @@
     "vendor_path": "./src/vendor",
     "precompiled_path": "./src/precompiled",
     "img_path": "./src/img",
-    "fonts_path": "./src/fonts",
+    "fonts_path": "./public/fonts",
     
     "bower_path": "./bower_components",
     "scss_sprite_path": "src/scss/sprite/built",
     
     "img_dest": "img",
-    "fonts_dest": "fonts",
+    "fonts_dest": "fonts/bootstrap",
     "img_dest_relative_css": "../../img/built",
     "browserSync": {
         "status": true,

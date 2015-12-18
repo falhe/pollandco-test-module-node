@@ -45,10 +45,10 @@
 }
 
 #sidebar {
-  position: fixed;
   top: 55px;
   color: #ffffff;
   margin-top: 30px;
+  width: 100%;
 }
 
 #sidebar .nav {
@@ -95,6 +95,22 @@
 
 #sidebar .nav > li > a > img {
   max-width: none;
+}
+
+#sidebar .submenu {
+  list-style: none;
+  font-size: 12px;
+}
+
+#sidebar .submenu > li > a {
+  display: block;
+  padding: 10px 0;
+  color: #fff;
+}
+
+#sidebar .submenu > li > a:hover {
+  text-decoration: none;
+  color: #47B39D;
 }
 
 #content .form-search-users-container {

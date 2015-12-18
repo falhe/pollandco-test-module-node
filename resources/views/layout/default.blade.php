@@ -33,7 +33,7 @@
             {{-- CONTENT CENTRAL --}}
             <div class="contents content-wrapper" id="content">
                 <div class="container-fluid">
-                    <div class="content">
+                    <div class="content" id="content-main">
                         @yield('content')
                     </div>
                 </div>
