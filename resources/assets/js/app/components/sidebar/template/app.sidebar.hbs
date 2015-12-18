@@ -2,7 +2,7 @@
     {{#each menu }}
         <li class="tp "><a href="{{link}}">{{title}} <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a></li>
         {{#if submenu }}
-            <ul class="submenu">
+            <ul class="submenu hide">
                 {{#each this.submenu }}
                     <li class="{{class}}"><a href="{{link}}">{{title}}</a></li>
                 {{/each}}
