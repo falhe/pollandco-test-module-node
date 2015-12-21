@@ -87,6 +87,7 @@ class AdminController extends Controller {
 	//-----------------------------------
 	public function getDashboard($user_id){
 		$user = User::findOrFail($user_id);
+		// since we use a Backbone SPA we don't need this anymore
 		return view('pages.search-users-admin', compact('user'));
 	}
 

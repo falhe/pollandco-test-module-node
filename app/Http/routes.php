@@ -28,7 +28,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function() {
     Route::get('/{action}', function(){
         //return 'SPA';
         //$user = User::findOrFail($user_id);
-        return view('pages.search-users-admin');
+        return view('pages.spa');
+        //return view('pages.search-users-admin');
     })
     ->where('action', '(.*)');
 
