@@ -11,7 +11,7 @@ var Backbone = require('backbone'),
 
 var createuserView = Backbone.View.extend({
 
-    el: '#list-main',
+    el: '#content-main',
 
     type: 'createuser_view',
 
@@ -23,6 +23,7 @@ var createuserView = Backbone.View.extend({
 
     initialize: function() {
         console.log(this);
+        //debugger;
         _.bindAll(this, 'render', 'processUser');
         this.collection.fetch({
             success: this.render

@@ -17,4 +17,24 @@
             font-size: 20px;
         }
     }
+
+    span{
+        display: inline-block;
+        vertical-align: middle;
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
+
+    .attr{
+        display: inline-block;
+        vertical-align: middle;
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+    }
 }

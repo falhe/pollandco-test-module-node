@@ -13438,7 +13438,7 @@ var SearchUsersCollection = Backbone.Collection.extend({
 });
 
 module.exports = SearchUsersCollection;
-},{"../models/app.user.model":23,"backbone":1}],14:[function(require,module,exports){
+},{"../models/app.user.model":25,"backbone":1}],14:[function(require,module,exports){
 var Backbone = require('backbone');
 
 var User = Backbone.Model.extend({
@@ -13493,7 +13493,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 },"2":function(depth0,helpers,partials,data) {
     var stack1;
 
-  return "            <ul class=\"submenu\">\r\n"
+  return "            <ul class=\"submenu hide\">\r\n"
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.submenu : depth0),{"name":"each","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "            </ul>\r\n";
 },"3":function(depth0,helpers,partials,data) {
@@ -13570,30 +13570,69 @@ var BaseView = Backbone.View.extend({
 
 module.exports = BaseView;
 },{"../model/app.sidebar.model":14,"../template/app.sidebar.hbs":15,"backbone":1,"underscore":12}],17:[function(require,module,exports){
+var Backbone = require("backbone"),
+    UserModel = require("../model/app.createuser.model");
+
+var SearchUsersCollection = Backbone.Collection.extend({
+
+    'model' : UserModel,
+
+    'url'   : rootPath + '/api/searchusers'
+});
+
+module.exports = SearchUsersCollection;
+},{"../model/app.createuser.model":18,"backbone":1}],18:[function(require,module,exports){
 var Backbone = require('backbone');
 
 var User = Backbone.Model.extend({
     defaults: {
-        
+        'quantite'      : 1,
+        'name'          : '',
+        'email'         : '',
+        'confirmed'     : 'false',
+        'created_at'    : '',
+        'updated_at'    : '',
+        'firstname'     : 'prénom',
+        'lastname'      : 'nom',
+        'avatar'        : 'avatar.jpg',
+        'birthday_date' : 'jj/mm/yyyy',
+        'role'          : 'paneliste/administrator',
+        'points'        : ''
     }
 });
 
 module.exports = User;
-},{"backbone":1}],18:[function(require,module,exports){
+},{"backbone":1}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<h1>Ajouter un utilisateur</h1>";
 },"useData":true});
 
-},{"hbsfy/runtime":10}],19:[function(require,module,exports){
+},{"hbsfy/runtime":10}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<h1>Liste de tous les utilisateurs</h1>";
+    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.created_at || (depth0 != null ? depth0.created_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"created_at","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.gender || (depth0 != null ? depth0.gender : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"gender","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.points || (depth0 != null ? depth0.points : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"points","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.role || (depth0 != null ? depth0.role : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"role","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\">"
+    + alias3(((helper = (helper = helpers.updated_at || (depth0 != null ? depth0.updated_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"updated_at","hash":{},"data":data}) : helper)))
+    + "</span>\r\n<span class=\"attr\"><a class=\"btn btn-default edit\" href=\"#\" role=\"button\">Modifier</a></span>\r\n<span class=\"attr\"><a class=\"btn btn-default btn-danger delete\" href=\"#\" role=\"button\">Supprimer</a></span>";
 },"useData":true});
 
-},{"hbsfy/runtime":10}],20:[function(require,module,exports){
+},{"hbsfy/runtime":10}],21:[function(require,module,exports){
 /*
     Template: Create user
     url: admin/createuser
@@ -13632,26 +13671,68 @@ var createuserView = Backbone.View.extend({
 });
 
 module.exports = createuserView;
-},{"../model/app.createuser.model":17,"../template/app.createuser.hbs":18,"backbone":1,"underscore":12}],21:[function(require,module,exports){
+},{"../model/app.createuser.model":18,"../template/app.createuser.hbs":19,"backbone":1,"underscore":12}],22:[function(require,module,exports){
+var Backbone = require('backbone'),
+    _ = require('underscore'),
+    UserTemplate = require('../template/app.useritem.hbs');
+
+var UserView = Backbone.View.extend({
+
+    template: UserTemplate,
+
+    tagName: 'div',
+
+    events: {
+        'click span': 'publish',
+        'click .edit': 'edit',
+        'click .delete': 'delete'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'render');
+    },
+
+    render: function() {
+        var html = this.template(this.model.toJSON());
+        this.$el.html(html);
+    },
+
+    publish: function(){
+        console.log(this);
+    },
+
+    edit: function(user){
+        console.log("edit", this);
+        debugger;
+    },
+
+    delete: function(){
+        console.log("delete", this);
+        debugger;
+        //this.model.destroy();
+    }
+});
+
+module.exports = UserView;
+},{"../template/app.useritem.hbs":20,"backbone":1,"underscore":12}],23:[function(require,module,exports){
 /*
     Template: List of all users
     url: admin/listuser
 */
 
 var Backbone = require('backbone'),
-    _ = require('underscore');
-var userModel = require('../model/app.createuser.model');
-var createUserViewTemplate = require('../template/app.listuser.hbs');
+    _ = require('underscore'),
+//    userModel = require('../model/app.createuser.model'),
+    userItemView = require('./app.useritem.View'),
+    UserList = require('../collection/app.createuser.collection');
 
 var createuserView = Backbone.View.extend({
 
     el: '#content-main',
 
-    template: createUserViewTemplate,
-
     type: 'createuser_view',
 
-    model: new userModel(),
+    collection: new UserList(),
 
     events: {
 
@@ -13659,19 +13740,29 @@ var createuserView = Backbone.View.extend({
 
     initialize: function() {
         console.log(this);
-        _.bindAll(this, 'render');
-        this.render();
+        //debugger;
+        _.bindAll(this, 'render', 'processUser');
+        this.collection.fetch({
+            success: this.render
+        });
     },
 
     render: function() {
-        var compiledTemplate = this.template(this.model.toJSON());
-        this.$el.html(compiledTemplate);
+        _.each(this.collection.models, this.processUser, this);
         return this;
+    },
+
+    processUser: function(user){
+        var childUserItem = new userItemView({
+            model: user
+        });
+        childUserItem.render();
+        this.$el.append(childUserItem.el);
     }
 });
 
 module.exports = createuserView;
-},{"../model/app.createuser.model":17,"../template/app.listuser.hbs":19,"backbone":1,"underscore":12}],22:[function(require,module,exports){
+},{"../collection/app.createuser.collection":17,"./app.useritem.View":22,"backbone":1,"underscore":12}],24:[function(require,module,exports){
 var _ = require('underscore');
 var Router = require('../router/app.router');
 
@@ -13696,28 +13787,9 @@ var Controller = (function() {
 })();
 
 module.exports = Controller;
-},{"../router/app.router":24,"underscore":12}],23:[function(require,module,exports){
-var Backbone = require('backbone');
-
-var User = Backbone.Model.extend({
-    defaults: {
-        'quantite'      : 1,
-        'name'          : '',
-        'email'         : '',
-        'confirmed'     : 'false',
-        'created_at'    : '',
-        'updated_at'    : '',
-        'firstname'     : 'prénom',
-        'lastname'      : 'nom',
-        'avatar'        : 'avatar.jpg',
-        'birthday_date' : 'jj/mm/yyyy',
-        'role'          : 'paneliste/administrator',
-        'points'        : ''
-    }
-});
-
-module.exports = User;
-},{"backbone":1}],24:[function(require,module,exports){
+},{"../router/app.router":26,"underscore":12}],25:[function(require,module,exports){
+arguments[4][18][0].apply(exports,arguments)
+},{"backbone":1,"dup":18}],26:[function(require,module,exports){
 var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -13726,7 +13798,7 @@ var searchUsersList = require('../views/app.searchusers-list.view');
 var searchUsers = require('../views/app.searchuser.view');
 var test = require('../views/app.toto.view');
 var sidebarView = require('../components/sidebar/view/app.sidebar.view');
-var listuserView = require('../components/users/view/app.listuser.view');
+var listuserView = require('../components/users/view/app.userlist.view');
 var createuserView = require('../components/users/view/app.createuser.view');
 
 
@@ -13786,7 +13858,7 @@ var Router = Backbone.Router.extend({
 });
 
 module.exports = Router;
-},{"../components/sidebar/view/app.sidebar.view":16,"../components/users/view/app.createuser.view":20,"../components/users/view/app.listuser.view":21,"../views/app.base.view":26,"../views/app.searchuser.view":27,"../views/app.searchusers-list.view":28,"../views/app.toto.view":29,"backbone":1,"jquery":11,"underscore":12}],25:[function(require,module,exports){
+},{"../components/sidebar/view/app.sidebar.view":16,"../components/users/view/app.createuser.view":21,"../components/users/view/app.userlist.view":23,"../views/app.base.view":28,"../views/app.searchuser.view":29,"../views/app.searchusers-list.view":30,"../views/app.toto.view":31,"backbone":1,"jquery":11,"underscore":12}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -13809,7 +13881,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"
     + "</td>";
 },"useData":true});
 
-},{"hbsfy/runtime":10}],26:[function(require,module,exports){
+},{"hbsfy/runtime":10}],28:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore');
 
@@ -13836,7 +13908,7 @@ var BaseView = Backbone.View.extend({
 });
 
 module.exports = BaseView;
-},{"backbone":1,"underscore":12}],27:[function(require,module,exports){
+},{"backbone":1,"underscore":12}],29:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserTemplate = require('../templates/app.user-view.hbs');
@@ -13866,7 +13938,7 @@ var BookView = Backbone.View.extend({
 });
 
 module.exports = BookView;
-},{"../templates/app.user-view.hbs":25,"backbone":1,"underscore":12}],28:[function(require,module,exports){
+},{"../templates/app.user-view.hbs":27,"backbone":1,"underscore":12}],30:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserList = require('../collections/app.searchusers.collection'),
@@ -13901,7 +13973,7 @@ var BookListView = Backbone.View.extend({
 });
 
 module.exports = BookListView;
-},{"../collections/app.searchusers.collection":13,"./app.searchuser.view":27,"backbone":1,"underscore":12}],29:[function(require,module,exports){
+},{"../collections/app.searchusers.collection":13,"./app.searchuser.view":29,"backbone":1,"underscore":12}],31:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore');
 
@@ -13928,7 +14000,7 @@ var tototo = Backbone.View.extend({
 });
 
 module.exports = tototo;
-},{"backbone":1,"underscore":12}],30:[function(require,module,exports){
+},{"backbone":1,"underscore":12}],32:[function(require,module,exports){
 var $ = require('jquery')(window),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
@@ -13968,7 +14040,7 @@ var $ = require('jquery')(window),
     });
 
 })(window, $);
-},{"./app/collections/app.searchusers.collection":13,"./app/components/sidebar/view/app.sidebar.view":16,"./app/controllers/app.controller":22,"./app/router/app.router":24,"./app/views/app.searchusers-list.view":28,"backbone":1,"jquery":11}]},{},[30])
+},{"./app/collections/app.searchusers.collection":13,"./app/components/sidebar/view/app.sidebar.view":16,"./app/controllers/app.controller":24,"./app/router/app.router":26,"./app/views/app.searchusers-list.view":30,"backbone":1,"jquery":11}]},{},[32])
 
 
 //# sourceMappingURL=app.js.map

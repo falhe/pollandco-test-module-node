@@ -36,6 +36,7 @@
                     <div class="content" id="content-main">
                         @yield('content')
                     </div>
+                    <div id="list-main"></div>
                 </div>
             </div>
 

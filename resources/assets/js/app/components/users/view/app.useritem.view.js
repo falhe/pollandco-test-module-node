@@ -6,10 +6,12 @@ var UserView = Backbone.View.extend({
 
     template: UserTemplate,
 
-    tagName: 'tr',
+    tagName: 'div',
 
     events: {
-        'click span': 'publish'
+        'click span': 'publish',
+        'click .edit': 'edit',
+        'click .delete': 'delete'
     },
 
     initialize: function() {
@@ -23,6 +25,17 @@ var UserView = Backbone.View.extend({
 
     publish: function(){
         console.log(this);
+    },
+
+    edit: function(user){
+        console.log("edit", this);
+        debugger;
+    },
+
+    delete: function(){
+        console.log("delete", this);
+        debugger;
+        //this.model.destroy();
     }
 });
 
