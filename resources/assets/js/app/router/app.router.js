@@ -8,6 +8,7 @@ var test = require('../views/app.toto.view');
 var sidebarView = require('../components/sidebar/view/app.sidebar.view');
 var listuserView = require('../components/users/view/app.userlist.view');
 var createuserView = require('../components/users/view/app.createuser.view');
+var edituserView = require('../components/users/view/app.useredit.view');
 
 
 //FOR TEST
@@ -29,7 +30,7 @@ var Router = Backbone.Router.extend({
         "dashboard/:id": "dashboard",
         "listuser": "listuser",
         "createuser": "createuser",
-        "deleteuser": "deleteuser"
+        "user/:id": "edituser"
     },
 
     dashboard: function() {
@@ -59,8 +60,8 @@ var Router = Backbone.Router.extend({
         var createuser = new createuserView();
     },
 
-    deleteuser: function(){
-        console.log('deleteuser');
+    edituser: function(id){
+        new edituserView();
     }
 
 });

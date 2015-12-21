@@ -22,8 +22,7 @@ var createuserView = Backbone.View.extend({
     },
 
     initialize: function() {
-        console.log(this);
-        //debugger;
+        console.log('[List of users]:init');
         _.bindAll(this, 'render', 'processUser');
         this.collection.fetch({
             success: this.render

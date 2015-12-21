@@ -9,12 +9,13 @@ var UserView = Backbone.View.extend({
     tagName: 'div',
 
     events: {
-        'click span': 'publish',
+        'click span': 'whatisthat',
         'click .edit': 'edit',
         'click .delete': 'delete'
     },
 
     initialize: function() {
+        console.log('[Single User item]:init');
         _.bindAll(this, 'render');
     },
 
@@ -23,19 +24,18 @@ var UserView = Backbone.View.extend({
         this.$el.html(html);
     },
 
-    publish: function(){
+    whatisthat: function(){
         console.log(this);
     },
 
     edit: function(user){
-        console.log("edit", this);
-        debugger;
+        console.log("edit user ", this);
+        app.router.navigate( "user/" + this.model.get('id'), {trigger: true});
     },
 
     delete: function(){
-        console.log("delete", this);
-        debugger;
-        //this.model.destroy();
+        console.log("delete user ", this);
+        this.model.destroy();
     }
 });
 

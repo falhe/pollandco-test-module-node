@@ -63,7 +63,7 @@ class SearchuserController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+		return 'edit' . $id;
 	}
 
 	/**
@@ -74,7 +74,7 @@ class SearchuserController extends Controller {
 	 */
 	public function update($id)
 	{
-		//
+		return 'update' . $id;
 	}
 
 	/**
@@ -85,7 +85,7 @@ class SearchuserController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		return $id;
+		return 'destroy' . $id;
 	}
 
 }
