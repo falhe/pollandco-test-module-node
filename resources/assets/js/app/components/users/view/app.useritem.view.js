@@ -6,10 +6,10 @@ var UserView = Backbone.View.extend({
 
     template: UserTemplate,
 
-    tagName: 'div',
+    tagName: 'tr',
 
     events: {
-        'click span': 'whatisthat',
+       // 'click span': 'whatisthat',
         'click .edit': 'edit',
         'click .delete': 'delete'
     },

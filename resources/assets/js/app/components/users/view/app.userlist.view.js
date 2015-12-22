@@ -11,9 +11,11 @@ var Backbone = require('backbone'),
 
 var createuserView = Backbone.View.extend({
 
-    el: '#content-main',
+    el: '#list-main',
 
     type: 'createuser_view',
+
+    table: '#users-list',
 
     collection: new UserList(),
 
@@ -24,6 +26,9 @@ var createuserView = Backbone.View.extend({
     initialize: function() {
         console.log('[List of users]:init');
         _.bindAll(this, 'render', 'processUser');
+        this.$el.empty();
+        this.$el.append('<h1>Liste de tous les utilisateurs</h1>');
+        this.$el.append('<table class="table table-striped table-hover table-condensed users-list" id="users-list">');
         this.collection.fetch({
             success: this.render
         });
@@ -39,7 +44,8 @@ var createuserView = Backbone.View.extend({
             model: user
         });
         childUserItem.render();
-        this.$el.append(childUserItem.el);
+        //this.$el.append(childUserItem.el);
+        $(this.table).append(childUserItem.el);
     }
 });
 

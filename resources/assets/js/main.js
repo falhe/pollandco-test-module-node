@@ -1,8 +1,8 @@
 var $ = require('jquery')(window),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
-    SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
-    SearchUsersListView = require('./app/views/app.searchusers-list.view'),
+    //SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
+    //SearchUsersListView = require('./app/views/app.searchusers-list.view'),
     Router = require('./app/router/app.router'),
     sidebarView = require('./app/components/sidebar/view/app.sidebar.view');
 
@@ -27,7 +27,7 @@ var $ = require('jquery')(window),
     console.log("test console toto");
 
     // //INSTANTIATE VIEWS
-    app.SearchUsersList = new SearchUsersListView();
+    //app.SearchUsersList = new SearchUsersListView();
     app.sidebar = new sidebarView();
     
     //Instantiate router

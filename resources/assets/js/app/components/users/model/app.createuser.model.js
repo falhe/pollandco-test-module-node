@@ -14,7 +14,9 @@ var User = Backbone.Model.extend({
         'birthday_date' : 'jj/mm/yyyy',
         'role'          : 'paneliste/administrator',
         'points'        : ''
-    }
+    },
+
+    urlRoot: rootPath + '/api/searchusers'
 });
 
 module.exports = User;

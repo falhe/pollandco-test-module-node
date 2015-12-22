@@ -1,15 +1,15 @@
 var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('underscore');
-var baseView = require('../views/app.base.view');
-var searchUsersList = require('../views/app.searchusers-list.view');
-var searchUsers = require('../views/app.searchuser.view');
-var test = require('../views/app.toto.view');
+//var baseView = require('../views/app.base.view');
+//var searchUsersList = require('../views/app.searchusers-list.view');
+//var searchUsers = require('../views/app.searchuser.view');
+//var test = require('../views/app.toto.view');
 var sidebarView = require('../components/sidebar/view/app.sidebar.view');
 var listuserView = require('../components/users/view/app.userlist.view');
 var createuserView = require('../components/users/view/app.createuser.view');
 var edituserView = require('../components/users/view/app.useredit.view');
-
+//var userCollection = require('../components/users/collection/app.user.collection');
 
 //FOR TEST
 //TODO create rooter with real routes
@@ -18,7 +18,6 @@ var Router = Backbone.Router.extend({
     whereami: null,
 
     initialize: function() {
-        //_.bindAll(this, 'routes', 'dashboard');
         console.log("[Router]:init");
     },
 
@@ -50,18 +49,18 @@ var Router = Backbone.Router.extend({
         console.log("gestion_points");
     },
 
-    listuser: function(){
+    listuser: function() {
         console.log('listuser');
         new listuserView();
     },
 
-    createuser: function(){
+    createuser: function() {
         console.log('createuser');
         var createuser = new createuserView();
     },
 
-    edituser: function(id){
-        new edituserView();
+    edituser: function(id) {
+        new edituserView({ id: id });
     }
 
 });

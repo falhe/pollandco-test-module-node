@@ -1,33 +1,46 @@
 var Backbone = require('backbone'),
     _ = require('underscore'),
-    UserTemplate = require('../template/app.useritem.hbs');
+    UserEditTemplate = require('../template/app.useredit.hbs');
+var userModel = require('../model/app.createuser.model');
+var serializeJSON = require('jquery-serializejson');
 
 var editUserView = Backbone.View.extend({
 
-    //template: UserTemplate,
+    el: '#content-main',
 
-    tagName: 'div',
+    template: UserEditTemplate,
 
     events: {
-        'click span': 'whatisthat'
+        'submit #form-user-update': 'updateUser'
     },
 
-    initialize: function() {
+    initialize: function(options) {
         console.log('[Edit user]:init');
-        _.bindAll(this, 'render', 'whatisthat');
+
+        this.id = options.id;
+        _.bindAll(this, 'render', 'updateUser');
+
+        //set model then fetch to have good datas
+        this.model = new userModel({
+            id: this.id
+        });
+        this.model.fetch();
+
+        this.listenTo(this.model, 'change', this.render);
+
     },
 
     render: function() {
-        //var html = this.template(this.model.toJSON());
+        //console.log(this.model.toJSON());
+        var html = this.template(this.model.toJSON());
         this.$el.html(html);
     },
 
-    whatisthat: function(){
-        console.log(this);
-    },
-
-    edit: function(user){
-        console.log("edit", this);
+    updateUser: function(e){
+        e.preventDefault();
+        var data = this.$el.find('#form-user-update').serializeJSON();
+        this.model.set(data);
+        this.model.save();
     }
 });
 

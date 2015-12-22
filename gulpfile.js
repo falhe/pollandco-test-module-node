@@ -43,7 +43,8 @@ var optionsUglifyProd = {
 //Clean destination folder
 plugins.gulp.task('clean', function() {
 	plugins.del([
-		config.public_path + '/**'
+		config.public_path + '/**/*'
+		//'public/dist/**/*'
 	], {
 		force: true
 	});

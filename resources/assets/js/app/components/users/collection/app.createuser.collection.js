@@ -3,9 +3,9 @@ var Backbone = require("backbone"),
 
 var SearchUsersCollection = Backbone.Collection.extend({
 
-    'model' : UserModel,
+    model : UserModel,
 
-    'url'   : rootPath + '/api/searchusers'
+    url: rootPath + '/api/searchusers'
 });
 
 module.exports = SearchUsersCollection;
