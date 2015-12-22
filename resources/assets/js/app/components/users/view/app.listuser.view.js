@@ -25,6 +25,7 @@ var createuserView = Backbone.View.extend({
     initialize: function() {
         console.log(this);
         _.bindAll(this, 'render');
+        this.$el.empty();
         this.render();
     },
 
