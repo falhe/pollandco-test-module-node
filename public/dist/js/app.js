@@ -1897,7 +1897,7 @@
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"jquery":11,"underscore":12}],2:[function(require,module,exports){
+},{"jquery":12,"underscore":13}],2:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -2665,6 +2665,285 @@ module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 module.exports = require("handlebars/runtime")["default"];
 
 },{"handlebars/runtime":9}],11:[function(require,module,exports){
+/*!
+  SerializeJSON jQuery plugin.
+  https://github.com/marioizquierdo/jquery.serializeJSON
+  version 2.6.2 (May, 2015)
+
+  Copyright (c) 2012, 2015 Mario Izquierdo
+  Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+  and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+*/
+(function (factory) {
+  if (typeof define === 'function' && define.amd) { // AMD. Register as an anonymous module.
+    define(['jquery'], factory);
+  } else if (typeof exports === 'object') { // Node/CommonJS
+    var jQuery = require('jquery');
+    module.exports = factory(jQuery);
+  } else { // Browser globals (zepto supported)
+    factory(window.jQuery || window.Zepto || window.$); // Zepto supported on browsers as well
+  }
+
+}(function ($) {
+  "use strict";
+
+  // jQuery('form').serializeJSON()
+  $.fn.serializeJSON = function (options) {
+    var serializedObject, formAsArray, keys, type, value, _ref, f, opts;
+    f = $.serializeJSON;
+    opts = f.setupOpts(options); // calculate values for options {parseNumbers, parseBoolens, parseNulls}
+    formAsArray = this.serializeArray(); // array of objects {name, value}
+    f.readCheckboxUncheckedValues(formAsArray, this, opts); // add {name, value} of unchecked checkboxes if needed
+
+    serializedObject = {};
+    $.each(formAsArray, function (i, input) {
+      keys = f.splitInputNameIntoKeysArray(input.name, opts);
+      type = keys.pop(); // the last element is always the type ("string" by default)
+      if (type !== 'skip') { // easy way to skip a value
+        value = f.parseValue(input.value, type, opts); // string, number, boolean or null
+        if (opts.parseWithFunction && type === '_') { // allow for custom parsing
+          value = opts.parseWithFunction(value, input.name);
+        }
+        f.deepSet(serializedObject, keys, value, opts);
+      }
+    });
+    return serializedObject;
+  };
+
+  // Use $.serializeJSON as namespace for the auxiliar functions
+  // and to define defaults
+  $.serializeJSON = {
+
+    defaultOptions: {
+      checkboxUncheckedValue: undefined, // to include that value for unchecked checkboxes (instead of ignoring them)
+
+      parseNumbers: false, // convert values like "1", "-2.33" to 1, -2.33
+      parseBooleans: false, // convert "true", "false" to true, false
+      parseNulls: false, // convert "null" to null
+      parseAll: false, // all of the above
+      parseWithFunction: null, // to use custom parser, a function like: function(val){ return parsed_val; }
+
+      customTypes: {}, // override defaultTypes
+      defaultTypes: {
+        "string":  function(str) { return String(str); },
+        "number":  function(str) { return Number(str); },
+        "boolean": function(str) { var falses = ["false", "null", "undefined", "", "0"]; return falses.indexOf(str) === -1; },
+        "null":    function(str) { var falses = ["false", "null", "undefined", "", "0"]; return falses.indexOf(str) === -1 ? str : null; },
+        "array":   function(str) { return JSON.parse(str); },
+        "object":  function(str) { return JSON.parse(str); },
+        "auto":    function(str) { return $.serializeJSON.parseValue(str, null, {parseNumbers: true, parseBooleans: true, parseNulls: true}); } // try again with something like "parseAll"
+      },
+
+      useIntKeysAsArrayIndex: false // name="foo[2]" value="v" => {foo: [null, null, "v"]}, instead of {foo: ["2": "v"]}
+    },
+
+    // Merge option defaults into the options
+    setupOpts: function(options) {
+      var opt, validOpts, defaultOptions, optWithDefault, parseAll, f;
+      f = $.serializeJSON;
+
+      if (options == null) { options = {}; }   // options ||= {}
+      defaultOptions = f.defaultOptions || {}; // defaultOptions
+
+      // Make sure that the user didn't misspell an option
+      validOpts = ['checkboxUncheckedValue', 'parseNumbers', 'parseBooleans', 'parseNulls', 'parseAll', 'parseWithFunction', 'customTypes', 'defaultTypes', 'useIntKeysAsArrayIndex']; // re-define because the user may override the defaultOptions
+      for (opt in options) {
+        if (validOpts.indexOf(opt) === -1) {
+          throw new  Error("serializeJSON ERROR: invalid option '" + opt + "'. Please use one of " + validOpts.join(', '));
+        }
+      }
+
+      // Helper to get the default value for this option if none is specified by the user
+      optWithDefault = function(key) { return (options[key] !== false) && (options[key] !== '') && (options[key] || defaultOptions[key]); };
+
+      // Return computed options (opts to be used in the rest of the script)
+      parseAll = optWithDefault('parseAll');
+      return {
+        checkboxUncheckedValue:    optWithDefault('checkboxUncheckedValue'),
+
+        parseNumbers:  parseAll || optWithDefault('parseNumbers'),
+        parseBooleans: parseAll || optWithDefault('parseBooleans'),
+        parseNulls:    parseAll || optWithDefault('parseNulls'),
+        parseWithFunction:         optWithDefault('parseWithFunction'),
+
+        typeFunctions: $.extend({}, optWithDefault('defaultTypes'), optWithDefault('customTypes')),
+
+        useIntKeysAsArrayIndex: optWithDefault('useIntKeysAsArrayIndex')
+      };
+    },
+
+    // Given a string, apply the type or the relevant "parse" options, to return the parsed value
+    parseValue: function(str, type, opts) {
+      var typeFunction, f;
+      f = $.serializeJSON;
+
+      // Parse with a type if available
+      typeFunction = opts.typeFunctions && opts.typeFunctions[type];
+      if (typeFunction) { return typeFunction(str); } // use specific type
+
+      // Otherwise, check if there is any auto-parse option enabled and use it.
+      if (opts.parseNumbers  && f.isNumeric(str)) { return Number(str); } // auto: number
+      if (opts.parseBooleans && (str === "true" || str === "false")) { return str === "true"; } // auto: boolean
+      if (opts.parseNulls    && str == "null") { return null; } // auto: null
+
+      // If none applies, just return the str
+      return str;
+    },
+
+    isObject:          function(obj) { return obj === Object(obj); }, // is it an Object?
+    isUndefined:       function(obj) { return obj === void 0; }, // safe check for undefined values
+    isValidArrayIndex: function(val) { return /^[0-9]+$/.test(String(val)); }, // 1,2,3,4 ... are valid array indexes
+    isNumeric:         function(obj) { return obj - parseFloat(obj) >= 0; }, // taken from jQuery.isNumeric implementation. Not using jQuery.isNumeric to support old jQuery and Zepto versions
+
+    optionKeys: function(obj) { if (Object.keys) { return Object.keys(obj); } else { var key, keys = []; for(key in obj){ keys.push(key); } return keys;} }, // polyfill Object.keys to get option keys in IE<9
+
+    // Split the input name in programatically readable keys.
+    // The last element is always the type (default "_").
+    // Examples:
+    // "foo"              => ['foo', '_']
+    // "foo:string"       => ['foo', 'string']
+    // "foo:boolean"      => ['foo', 'boolean']
+    // "[foo]"            => ['foo', '_']
+    // "foo[inn][bar]"    => ['foo', 'inn', 'bar', '_']
+    // "foo[inn[bar]]"    => ['foo', 'inn', 'bar', '_']
+    // "foo[inn][arr][0]" => ['foo', 'inn', 'arr', '0', '_']
+    // "arr[][val]"       => ['arr', '', 'val', '_']
+    // "arr[][val]:null"  => ['arr', '', 'val', 'null']
+    splitInputNameIntoKeysArray: function(name, opts) {
+      var keys, nameWithoutType, type, _ref, f;
+      f = $.serializeJSON;
+      _ref = f.extractTypeFromInputName(name, opts); nameWithoutType = _ref[0]; type = _ref[1];
+      keys = nameWithoutType.split('['); // split string into array
+      keys = $.map(keys, function (key) { return key.replace(/\]/g, ''); }); // remove closing brackets
+      if (keys[0] === '') { keys.shift(); } // ensure no opening bracket ("[foo][inn]" should be same as "foo[inn]")
+      keys.push(type); // add type at the end
+      return keys;
+    },
+
+    // Returns [name-without-type, type] from name.
+    // "foo"              =>  ["foo",      '_']
+    // "foo:boolean"      =>  ["foo",      'boolean']
+    // "foo[bar]:null"    =>  ["foo[bar]", 'null']
+    extractTypeFromInputName: function(name, opts) {
+      var match, validTypes, f;
+      if (match = name.match(/(.*):([^:]+)$/)){
+        f = $.serializeJSON;
+
+        validTypes = f.optionKeys(opts ? opts.typeFunctions : f.defaultOptions.defaultTypes);
+        validTypes.push('skip'); // skip is a special type that makes it easy to remove
+        if (validTypes.indexOf(match[2]) !== -1) {
+          return [match[1], match[2]];
+        } else {
+          throw new Error("serializeJSON ERROR: Invalid type " + match[2] + " found in input name '" + name + "', please use one of " + validTypes.join(', '));
+        }
+      } else {
+        return [name, '_']; // no defined type, then use parse options
+      }
+    },
+
+    // Set a value in an object or array, using multiple keys to set in a nested object or array:
+    //
+    // deepSet(obj, ['foo'], v)               // obj['foo'] = v
+    // deepSet(obj, ['foo', 'inn'], v)        // obj['foo']['inn'] = v // Create the inner obj['foo'] object, if needed
+    // deepSet(obj, ['foo', 'inn', '123'], v) // obj['foo']['arr']['123'] = v //
+    //
+    // deepSet(obj, ['0'], v)                                   // obj['0'] = v
+    // deepSet(arr, ['0'], v, {useIntKeysAsArrayIndex: true})   // arr[0] = v
+    // deepSet(arr, [''], v)                                    // arr.push(v)
+    // deepSet(obj, ['arr', ''], v)                             // obj['arr'].push(v)
+    //
+    // arr = [];
+    // deepSet(arr, ['', v]          // arr => [v]
+    // deepSet(arr, ['', 'foo'], v)  // arr => [v, {foo: v}]
+    // deepSet(arr, ['', 'bar'], v)  // arr => [v, {foo: v, bar: v}]
+    // deepSet(arr, ['', 'bar'], v)  // arr => [v, {foo: v, bar: v}, {bar: v}]
+    //
+    deepSet: function (o, keys, value, opts) {
+      var key, nextKey, tail, lastIdx, lastVal, f;
+      if (opts == null) { opts = {}; }
+      f = $.serializeJSON;
+      if (f.isUndefined(o)) { throw new Error("ArgumentError: param 'o' expected to be an object or array, found undefined"); }
+      if (!keys || keys.length === 0) { throw new Error("ArgumentError: param 'keys' expected to be an array with least one element"); }
+
+      key = keys[0];
+
+      // Only one key, then it's not a deepSet, just assign the value.
+      if (keys.length === 1) {
+        if (key === '') {
+          o.push(value); // '' is used to push values into the array (assume o is an array)
+        } else {
+          o[key] = value; // other keys can be used as object keys or array indexes
+        }
+
+      // With more keys is a deepSet. Apply recursively.
+      } else {
+        nextKey = keys[1];
+
+        // '' is used to push values into the array,
+        // with nextKey, set the value into the same object, in object[nextKey].
+        // Covers the case of ['', 'foo'] and ['', 'var'] to push the object {foo, var}, and the case of nested arrays.
+        if (key === '') {
+          lastIdx = o.length - 1; // asume o is array
+          lastVal = o[lastIdx];
+          if (f.isObject(lastVal) && (f.isUndefined(lastVal[nextKey]) || keys.length > 2)) { // if nextKey is not present in the last object element, or there are more keys to deep set
+            key = lastIdx; // then set the new value in the same object element
+          } else {
+            key = lastIdx + 1; // otherwise, point to set the next index in the array
+          }
+        }
+
+        // '' is used to push values into the array "array[]"
+        if (nextKey === '') {
+          if (f.isUndefined(o[key]) || !$.isArray(o[key])) {
+            o[key] = []; // define (or override) as array to push values
+          }
+        } else {
+          if (opts.useIntKeysAsArrayIndex && f.isValidArrayIndex(nextKey)) { // if 1, 2, 3 ... then use an array, where nextKey is the index
+            if (f.isUndefined(o[key]) || !$.isArray(o[key])) {
+              o[key] = []; // define (or override) as array, to insert values using int keys as array indexes
+            }
+          } else { // for anything else, use an object, where nextKey is going to be the attribute name
+            if (f.isUndefined(o[key]) || !f.isObject(o[key])) {
+              o[key] = {}; // define (or override) as object, to set nested properties
+            }
+          }
+        }
+
+        // Recursively set the inner object
+        tail = keys.slice(1);
+        f.deepSet(o[key], tail, value, opts);
+      }
+    },
+
+    // Fill the formAsArray object with values for the unchecked checkbox inputs,
+    // using the same format as the jquery.serializeArray function.
+    // The value of the unchecked values is determined from the opts.checkboxUncheckedValue
+    // and/or the data-unchecked-value attribute of the inputs.
+    readCheckboxUncheckedValues: function (formAsArray, $form, opts) {
+      var selector, $uncheckedCheckboxes, $el, dataUncheckedValue, f;
+      if (opts == null) { opts = {}; }
+      f = $.serializeJSON;
+
+      selector = 'input[type=checkbox][name]:not(:checked):not([disabled])';
+      $uncheckedCheckboxes = $form.find(selector).add($form.filter(selector));
+      $uncheckedCheckboxes.each(function (i, el) {
+        $el = $(el);
+        dataUncheckedValue = $el.attr('data-unchecked-value');
+        if(dataUncheckedValue) { // data-unchecked-value has precedence over option opts.checkboxUncheckedValue
+          formAsArray.push({name: el.name, value: dataUncheckedValue});
+        } else {
+          if (!f.isUndefined(opts.checkboxUncheckedValue)) {
+            formAsArray.push({name: el.name, value: opts.checkboxUncheckedValue});
+          }
+        }
+      });
+    }
+
+  };
+
+}));
+
+},{"jquery":12}],12:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -11876,7 +12155,7 @@ return jQuery;
 
 }));
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -13426,19 +13705,7 @@ return jQuery;
   }
 }.call(this));
 
-},{}],13:[function(require,module,exports){
-var Backbone = require("backbone"),
-    UserModel = require("../models/app.user.model");
-
-var SearchUsersCollection = Backbone.Collection.extend({
-
-    'model' : UserModel,
-
-    'url'   : rootPath + '/api/searchusers'
-});
-
-module.exports = SearchUsersCollection;
-},{"../models/app.user.model":26,"backbone":1}],14:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var Backbone = require('backbone');
 
 var User = Backbone.Model.extend({
@@ -13569,15 +13836,15 @@ var BaseView = Backbone.View.extend({
 });
 
 module.exports = BaseView;
-},{"../model/app.sidebar.model":14,"../template/app.sidebar.hbs":15,"backbone":1,"underscore":12}],17:[function(require,module,exports){
+},{"../model/app.sidebar.model":14,"../template/app.sidebar.hbs":15,"backbone":1,"underscore":13}],17:[function(require,module,exports){
 var Backbone = require("backbone"),
     UserModel = require("../model/app.createuser.model");
 
 var SearchUsersCollection = Backbone.Collection.extend({
 
-    'model' : UserModel,
+    model : UserModel,
 
-    'url'   : rootPath + '/api/searchusers'
+    url: rootPath + '/api/searchusers'
 });
 
 module.exports = SearchUsersCollection;
@@ -13598,7 +13865,9 @@ var User = Backbone.Model.extend({
         'birthday_date' : 'jj/mm/yyyy',
         'role'          : 'paneliste/administrator',
         'points'        : ''
-    }
+    },
+
+    urlRoot: rootPath + '/api/searchusers'
 });
 
 module.exports = User;
@@ -13615,24 +13884,63 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
-  return "<span class=\"attr\">"
+  return "<div class=\"user-edit\">\r\n\r\n	<h1>Edit d'un utilisateur</h1>\r\n\r\n	<form id=\"form-user-update\">\r\n		<div class=\"form-group\">\r\n			<label for=\"email\">E-mail</label>\r\n			<input type=\"email\" class=\"form-control\" id=\"email\" name=\"email\" placeholder=\""
     + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\" value=\""
+    + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"name\">Nom</label>\r\n			<input type=\"type\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\""
     + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\" value=\""
+    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"name\">Prénom</label>\r\n			<input type=\"type\" class=\"form-control\" id=\"firstanme\" name=\"firstname\" placeholder=\""
+    + alias3(((helper = (helper = helpers.firstname || (depth0 != null ? depth0.firstname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"firstname","hash":{},"data":data}) : helper)))
+    + "\" value=\""
+    + alias3(((helper = (helper = helpers.firstname || (depth0 != null ? depth0.firstname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"firstname","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"created_at\">Date d'inscription</label>\r\n			<input type=\"input\" class=\"form-control\" id=\"created_at\" name=\"created_at\" placeholder=\""
     + alias3(((helper = (helper = helpers.created_at || (depth0 != null ? depth0.created_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"created_at","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\" disabled>\r\n		</div>\r\n		<div class=\"form-group radio\">\r\n			<label class=\"radio-inline\">\r\n			  <input type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio1\" value=\""
     + alias3(((helper = (helper = helpers.gender || (depth0 != null ? depth0.gender : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"gender","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\" checked=\"checked\"> Femme\r\n			</label>\r\n			<label class=\"radio-inline\">\r\n			  <input type=\"radio\" name=\"inlineRadioOptions\" id=\"inlineRadio2\" value=\""
+    + alias3(((helper = (helper = helpers.gender || (depth0 != null ? depth0.gender : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"gender","hash":{},"data":data}) : helper)))
+    + "\"> Homme\r\n			</label>\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"points\">Nombre de points</label>\r\n			<input type=\"input\" class=\"form-control\" id=\"points\" name=\"points\" placeholder=\""
     + alias3(((helper = (helper = helpers.points || (depth0 != null ? depth0.points : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"points","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\">\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"role\">Rôle</label>\r\n			<input type=\"input\" class=\"form-control\" id=\"role\" name=\"role\" placeholder=\""
     + alias3(((helper = (helper = helpers.role || (depth0 != null ? depth0.role : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"role","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\">"
+    + "\" value=\""
+    + alias3(((helper = (helper = helpers.role || (depth0 != null ? depth0.role : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"role","hash":{},"data":data}) : helper)))
+    + "\">\r\n		</div>\r\n		<div class=\"form-group\">\r\n			<label for=\"updated_at\">updated_at</label>\r\n			<input type=\"input\" class=\"form-control\" id=\"updated_at\" name=\"updated_at\" placeholder=\""
     + alias3(((helper = (helper = helpers.updated_at || (depth0 != null ? depth0.updated_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"updated_at","hash":{},"data":data}) : helper)))
-    + "</span>\r\n<span class=\"attr\"><a class=\"btn btn-default edit\" href=\"#\" role=\"button\">Modifier</a></span>\r\n<span class=\"attr\"><a class=\"btn btn-default btn-danger delete\" href=\"#\" role=\"button\">Supprimer</a></span>";
+    + "\" value=\""
+    + alias3(((helper = (helper = helpers.updated_at || (depth0 != null ? depth0.updated_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"updated_at","hash":{},"data":data}) : helper)))
+    + "\" disabled>\r\n		</div>\r\n\r\n		<button type=\"submit\" class=\"btn btn-default\" id=\"edit\">Modifier</button>\r\n	</form>\r\n\r\n</div>";
 },"useData":true});
 
 },{"hbsfy/runtime":10}],21:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "<td>"
+    + alias3(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"id","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.created_at || (depth0 != null ? depth0.created_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"created_at","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.gender || (depth0 != null ? depth0.gender : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"gender","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.points || (depth0 != null ? depth0.points : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"points","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.role || (depth0 != null ? depth0.role : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"role","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\">"
+    + alias3(((helper = (helper = helpers.updated_at || (depth0 != null ? depth0.updated_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"updated_at","hash":{},"data":data}) : helper)))
+    + "</td>\r\n<td class=\"\"><a class=\"btn btn-default edit\" href=\"#\" role=\"button\">Modifier</a></td>\r\n<td class=\"\"><a class=\"btn btn-default btn-danger delete\" href=\"#\" role=\"button\">Supprimer</a></td>\r\n";
+},"useData":true});
+
+},{"hbsfy/runtime":10}],22:[function(require,module,exports){
 /*
     Template: Create user
     url: admin/createuser
@@ -13671,42 +13979,55 @@ var createuserView = Backbone.View.extend({
 });
 
 module.exports = createuserView;
-},{"../model/app.createuser.model":18,"../template/app.createuser.hbs":19,"backbone":1,"underscore":12}],22:[function(require,module,exports){
+},{"../model/app.createuser.model":18,"../template/app.createuser.hbs":19,"backbone":1,"underscore":13}],23:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
-    UserTemplate = require('../template/app.useritem.hbs');
+    UserEditTemplate = require('../template/app.useredit.hbs');
+var userModel = require('../model/app.createuser.model');
+var serializeJSON = require('jquery-serializejson');
 
 var editUserView = Backbone.View.extend({
 
-    //template: UserTemplate,
+    el: '#content-main',
 
-    tagName: 'div',
+    template: UserEditTemplate,
 
     events: {
-        'click span': 'whatisthat'
+        'submit #form-user-update': 'updateUser'
     },
 
-    initialize: function() {
+    initialize: function(options) {
         console.log('[Edit user]:init');
-        _.bindAll(this, 'render', 'whatisthat');
+
+        this.id = options.id;
+        _.bindAll(this, 'render', 'updateUser');
+
+        //set model then fetch to have good datas
+        this.model = new userModel({
+            id: this.id
+        });
+        this.model.fetch();
+
+        this.listenTo(this.model, 'change', this.render);
+
     },
 
     render: function() {
-        //var html = this.template(this.model.toJSON());
+        //console.log(this.model.toJSON());
+        var html = this.template(this.model.toJSON());
         this.$el.html(html);
     },
 
-    whatisthat: function(){
-        console.log(this);
-    },
-
-    edit: function(user){
-        console.log("edit", this);
+    updateUser: function(e){
+        e.preventDefault();
+        var data = this.$el.find('#form-user-update').serializeJSON();
+        this.model.set(data);
+        this.model.save();
     }
 });
 
 module.exports = editUserView;
-},{"../template/app.useritem.hbs":20,"backbone":1,"underscore":12}],23:[function(require,module,exports){
+},{"../model/app.createuser.model":18,"../template/app.useredit.hbs":20,"backbone":1,"jquery-serializejson":11,"underscore":13}],24:[function(require,module,exports){
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserTemplate = require('../template/app.useritem.hbs');
@@ -13715,10 +14036,10 @@ var UserView = Backbone.View.extend({
 
     template: UserTemplate,
 
-    tagName: 'div',
+    tagName: 'tr',
 
     events: {
-        'click span': 'whatisthat',
+       // 'click span': 'whatisthat',
         'click .edit': 'edit',
         'click .delete': 'delete'
     },
@@ -13749,7 +14070,7 @@ var UserView = Backbone.View.extend({
 });
 
 module.exports = UserView;
-},{"../template/app.useritem.hbs":20,"backbone":1,"underscore":12}],24:[function(require,module,exports){
+},{"../template/app.useritem.hbs":21,"backbone":1,"underscore":13}],25:[function(require,module,exports){
 /*
     Template: List of all users
     url: admin/listuser
@@ -13763,9 +14084,11 @@ var Backbone = require('backbone'),
 
 var createuserView = Backbone.View.extend({
 
-    el: '#content-main',
+    el: '#list-main',
 
     type: 'createuser_view',
+
+    table: '#users-list',
 
     collection: new UserList(),
 
@@ -13776,6 +14099,9 @@ var createuserView = Backbone.View.extend({
     initialize: function() {
         console.log('[List of users]:init');
         _.bindAll(this, 'render', 'processUser');
+        this.$el.empty();
+        this.$el.append('<h1>Liste de tous les utilisateurs</h1>');
+        this.$el.append('<table class="table table-striped table-hover table-condensed users-list" id="users-list">');
         this.collection.fetch({
             success: this.render
         });
@@ -13791,12 +14117,13 @@ var createuserView = Backbone.View.extend({
             model: user
         });
         childUserItem.render();
-        this.$el.append(childUserItem.el);
+        //this.$el.append(childUserItem.el);
+        $(this.table).append(childUserItem.el);
     }
 });
 
 module.exports = createuserView;
-},{"../collection/app.createuser.collection":17,"./app.useritem.View":23,"backbone":1,"underscore":12}],25:[function(require,module,exports){
+},{"../collection/app.createuser.collection":17,"./app.useritem.View":24,"backbone":1,"underscore":13}],26:[function(require,module,exports){
 var _ = require('underscore');
 var Router = require('../router/app.router');
 
@@ -13821,21 +14148,19 @@ var Controller = (function() {
 })();
 
 module.exports = Controller;
-},{"../router/app.router":27,"underscore":12}],26:[function(require,module,exports){
-arguments[4][18][0].apply(exports,arguments)
-},{"backbone":1,"dup":18}],27:[function(require,module,exports){
+},{"../router/app.router":27,"underscore":13}],27:[function(require,module,exports){
 var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('underscore');
-var baseView = require('../views/app.base.view');
-var searchUsersList = require('../views/app.searchusers-list.view');
-var searchUsers = require('../views/app.searchuser.view');
-var test = require('../views/app.toto.view');
+//var baseView = require('../views/app.base.view');
+//var searchUsersList = require('../views/app.searchusers-list.view');
+//var searchUsers = require('../views/app.searchuser.view');
+//var test = require('../views/app.toto.view');
 var sidebarView = require('../components/sidebar/view/app.sidebar.view');
 var listuserView = require('../components/users/view/app.userlist.view');
 var createuserView = require('../components/users/view/app.createuser.view');
 var edituserView = require('../components/users/view/app.useredit.view');
-
+//var userCollection = require('../components/users/collection/app.user.collection');
 
 //FOR TEST
 //TODO create rooter with real routes
@@ -13844,7 +14169,6 @@ var Router = Backbone.Router.extend({
     whereami: null,
 
     initialize: function() {
-        //_.bindAll(this, 'routes', 'dashboard');
         console.log("[Router]:init");
     },
 
@@ -13876,171 +14200,29 @@ var Router = Backbone.Router.extend({
         console.log("gestion_points");
     },
 
-    listuser: function(){
+    listuser: function() {
         console.log('listuser');
         new listuserView();
     },
 
-    createuser: function(){
+    createuser: function() {
         console.log('createuser');
         var createuser = new createuserView();
     },
 
-    edituser: function(id){
-        new edituserView();
+    edituser: function(id) {
+        new edituserView({ id: id });
     }
 
 });
 
 module.exports = Router;
-},{"../components/sidebar/view/app.sidebar.view":16,"../components/users/view/app.createuser.view":21,"../components/users/view/app.useredit.view":22,"../components/users/view/app.userlist.view":24,"../views/app.base.view":29,"../views/app.searchuser.view":30,"../views/app.searchusers-list.view":31,"../views/app.toto.view":32,"backbone":1,"jquery":11,"underscore":12}],28:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var HandlebarsCompiler = require('hbsfy/runtime');
-module.exports = HandlebarsCompiler.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
-
-  return "<!-- Tableau des users -->\r\n\r\n<td>"
-    + alias3(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.firstname || (depth0 != null ? depth0.firstname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"firstname","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.lastname || (depth0 != null ? depth0.lastname : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"lastname","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"email","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.gender || (depth0 != null ? depth0.gender : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"gender","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.created_at || (depth0 != null ? depth0.created_at : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"created_at","hash":{},"data":data}) : helper)))
-    + "</td>\r\n<td>"
-    + alias3(((helper = (helper = helpers.role_id || (depth0 != null ? depth0.role_id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"role_id","hash":{},"data":data}) : helper)))
-    + "</td>";
-},"useData":true});
-
-},{"hbsfy/runtime":10}],29:[function(require,module,exports){
-var Backbone = require('backbone'),
-    _ = require('underscore');
-
-var BaseView = Backbone.View.extend({
-
-    el: 'body',
-
-    type: 'base_view',
-
-    events: {
-    },
-
-    initialize: function() {
-        console.log(this);
-        _.bindAll(this, 'render', 'publish');
-    },
-
-    render: function() {
-    },
-
-    publish: function(){
-        console.log(this);
-    }
-});
-
-module.exports = BaseView;
-},{"backbone":1,"underscore":12}],30:[function(require,module,exports){
-var Backbone = require('backbone'),
-    _ = require('underscore'),
-    UserTemplate = require('../templates/app.user-view.hbs');
-
-var BookView = Backbone.View.extend({
-
-    template: UserTemplate,
-
-    tagName: 'tr',
-
-    events: {
-        'click span': 'publish'
-    },
-
-    initialize: function() {
-        _.bindAll(this, 'render');
-    },
-
-    render: function() {
-        var html = this.template(this.model.toJSON());
-        this.$el.html(html);
-    },
-
-    publish: function(){
-        console.log(this);
-    }
-});
-
-module.exports = BookView;
-},{"../templates/app.user-view.hbs":28,"backbone":1,"underscore":12}],31:[function(require,module,exports){
-var Backbone = require('backbone'),
-    _ = require('underscore'),
-    UserList = require('../collections/app.searchusers.collection'),
-    UserItemView = require('./app.searchuser.view');
-
-
-var BookListView = Backbone.View.extend({
-    el: '#search-users-list',
-
-    collection: new UserList(),
-
-    initialize: function() { 
-        _.bindAll(this, 'render', 'processUser');
-        this.collection.fetch({
-            success: this.render
-        });
-    },
-
-    render: function() {
-        _.each(this.collection.models, this.processUser, this);
-        return this;
-    },
-
-    //Each User instanciate a new user's view
-    processUser: function(user) {
-        var childUserItemView = new UserItemView({
-            model: user
-        });
-        childUserItemView.render();
-        this.$el.append(childUserItemView.el);
-    }
-});
-
-module.exports = BookListView;
-},{"../collections/app.searchusers.collection":13,"./app.searchuser.view":30,"backbone":1,"underscore":12}],32:[function(require,module,exports){
-var Backbone = require('backbone'),
-    _ = require('underscore');
-
-var tototo = Backbone.View.extend({
-
-    el: 'body',
-
-    type: 'base_view',
-
-    events: {
-    },
-
-    initialize: function() {
-        console.log(this , 'toto view');
-        _.bindAll(this, 'render', 'publish');
-    },
-
-    render: function() {
-    },
-
-    publish: function(){
-        console.log(this);
-    }
-});
-
-module.exports = tototo;
-},{"backbone":1,"underscore":12}],33:[function(require,module,exports){
+},{"../components/sidebar/view/app.sidebar.view":16,"../components/users/view/app.createuser.view":22,"../components/users/view/app.useredit.view":23,"../components/users/view/app.userlist.view":25,"backbone":1,"jquery":12,"underscore":13}],28:[function(require,module,exports){
 var $ = require('jquery')(window),
     Backbone = require('backbone'),
     Controller = require('./app/controllers/app.controller'),
-    SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
-    SearchUsersListView = require('./app/views/app.searchusers-list.view'),
+    //SearchUsersCollection = require('./app/collections/app.searchusers.collection'),
+    //SearchUsersListView = require('./app/views/app.searchusers-list.view'),
     Router = require('./app/router/app.router'),
     sidebarView = require('./app/components/sidebar/view/app.sidebar.view');
 
@@ -14065,7 +14247,7 @@ var $ = require('jquery')(window),
     console.log("test console toto");
 
     // //INSTANTIATE VIEWS
-    app.SearchUsersList = new SearchUsersListView();
+    //app.SearchUsersList = new SearchUsersListView();
     app.sidebar = new sidebarView();
     
     //Instantiate router
@@ -14075,7 +14257,7 @@ var $ = require('jquery')(window),
     });
 
 })(window, $);
-},{"./app/collections/app.searchusers.collection":13,"./app/components/sidebar/view/app.sidebar.view":16,"./app/controllers/app.controller":25,"./app/router/app.router":27,"./app/views/app.searchusers-list.view":31,"backbone":1,"jquery":11}]},{},[33])
+},{"./app/components/sidebar/view/app.sidebar.view":16,"./app/controllers/app.controller":26,"./app/router/app.router":27,"backbone":1,"jquery":12}]},{},[28])
 
 
 //# sourceMappingURL=app.js.map
