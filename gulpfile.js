@@ -43,11 +43,9 @@ var optionsUglifyProd = {
 //Clean destination folder
 plugins.gulp.task('clean', function() {
 	plugins.del([
-		config.public_path + '/**/*'
-		//'public/dist/**/*'
-	], {
-		force: true
-	});
+		config.public_path,
+		config.public_path + '/fonts/**/*'
+	]);
 });
 
 //JSHint
@@ -166,7 +164,7 @@ plugins.gulp.task('copyassets', function(){
 		config.img_path + '/**',
 		'!' + config.img_path + '/{svg,svg/**}'
 		])
-	.pipe(plugins.gulp.dest(config.public_path + config.img_dest))
+	.pipe(plugins.gulp.dest(config.public_path + '/' + config.img_dest))
 
 	plugins.gulp.src([
 		config.fonts_path + '/**'
@@ -188,8 +186,8 @@ plugins.gulp.task('compile:dev', function() {
 	plugins.runSequence(
 		'clean',
 		'gitinfo',
-		'copyassets',
-		['styles:dev','jshint', 'scripts'],
+//		'copyassets',
+		['styles:dev','jshint', 'scripts', 'copyassets'],
 		function() {
 			plugins.util.log('Ready for dev!');
 			plugins.gulp.watch(config.scss_path + '/**/*.scss', ['styles:dev']);

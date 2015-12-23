@@ -11,7 +11,7 @@ var Backbone = require('backbone'),
 
 var createuserView = Backbone.View.extend({
 
-    el: '#list-main',
+    el: '#content-main',
 
     type: 'createuser_view',
 
