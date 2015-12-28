@@ -15,21 +15,16 @@ var $ = require('jquery')(window),
 
     console.log("[Main:init] initialize du main.js");
 
-    // INSTANTIATE COLLECTION
-    //app.SearchUsersCollection = new SearchUsersCollection();
-
     app.router = new Router;
     app.controller = Controller;
     app.toto = "toto";
     app.lulu = function() {
         console.log('lulu');
     };
-    console.log("test console toto");
 
     // //INSTANTIATE VIEWS
-    //app.SearchUsersList = new SearchUsersListView();
     app.sidebar = new sidebarView();
-    
+
     //Instantiate router
     Backbone.history.start({
         pushState: true,

@@ -1,1 +1,46 @@
-<h1>Ajouter un utilisateur</h1>
+<div class="user-register">
+
+  <h1>Ajouter un utilisateur</h1>
+
+	<form id="form-user-update">
+		<div class="form-group">
+			<label for="email">E-mail</label>
+			<input type="email" class="form-control" id="email" name="email" placeholder="email">
+		</div>
+		<div class="form-group">
+			<label for="name">Nom</label>
+			<input type="type" class="form-control" id="name" name="name" placeholder="Nom">
+		</div>
+		<div class="form-group">
+			<label for="name">Prénom</label>
+			<input type="type" class="form-control" id="firstanme" name="firstname" placeholder="Prénom">
+		</div>
+		<div class="form-group">
+			<label for="created_at">Date d'inscription</label>
+			<input type="input" class="form-control" id="created_at" name="created_at" placeholder="{{created_at}}" disabled>
+		</div>
+		<div class="form-group radio">
+			<label class="radio-inline">
+			  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="{{gender}}" checked="checked"> Femme
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="{{gender}}"> Homme
+			</label>
+		</div>
+		<div class="form-group">
+			<label for="points">Nombre de points</label>
+			<input type="input" class="form-control" id="points" name="points" placeholder="0 points pour commencer">
+		</div>
+		<div class="form-group">
+			<label for="role">Rôle</label>
+			<input type="input" class="form-control" id="role" name="role" placeholder="Panéliste" value="1" disabled>
+		</div>
+		<!-- <div class="form-group">
+			<label for="updated_at">updated_at</label>
+			<input type="input" class="form-control" id="updated_at" name="updated_at" placeholder="{{updated_at}}" value="{{updated_at}}" disabled>
+		</div> -->
+
+		<button type="submit" class="btn btn-default" id="edit">Enregistrer cet utilisateur</button>
+	</form>
+
+</div>
