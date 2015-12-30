@@ -14,10 +14,6 @@ var User = Backbone.Model.extend({
                 'title': 'Ajouter un Utilisateur',
                 'link': 'createuser',
                 'class': 'create'
-            },{
-                'title': 'Supprimer un Utilisateur',
-                'link': 'deleteuser',
-                'class': 'delete'
             }]
         }, {
             'title': 'Administrateur',

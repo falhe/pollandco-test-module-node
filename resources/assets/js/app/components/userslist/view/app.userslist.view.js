@@ -7,7 +7,7 @@
 var Backbone = require('backbone'),
     _ = require('underscore'),
     userItemView = require('./app.useritem.View'),
-    UserList = require('../collection/app.createuser.collection');
+    UserList = require('../collection/app.userslist.collection');
 
 var createuserView = Backbone.View.extend({
 

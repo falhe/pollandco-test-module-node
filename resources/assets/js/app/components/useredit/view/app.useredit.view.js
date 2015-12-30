@@ -7,7 +7,7 @@
 var Backbone = require('backbone'),
     _ = require('underscore'),
     UserEditTemplate = require('../template/app.useredit.hbs'),
-    userModel = require('../model/app.createuser.model'),
+    userModel = require('../../usercreate/model/app.usercreate.model'),
     serializeJSON = require('jquery-serializejson'),
     Radio = require('backbone.radio');
 

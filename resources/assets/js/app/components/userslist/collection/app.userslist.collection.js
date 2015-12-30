@@ -1,5 +1,5 @@
 var Backbone = require("backbone"),
-    UserModel = require("../model/app.createuser.model");
+    UserModel = require("../../usercreate/model/app.usercreate.model");
 
 var SearchUsersCollection = Backbone.Collection.extend({
 

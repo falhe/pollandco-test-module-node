@@ -2,9 +2,9 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('underscore');
 var sidebarView = require('../components/sidebar/view/app.sidebar.view');
-var listuserView = require('../components/users/view/app.userlist.view');
-var createuserView = require('../components/users/view/app.createuser.view');
-var edituserView = require('../components/users/view/app.useredit.view');
+var listuserView = require('../components/userslist/view/app.userslist.view');
+var createuserView = require('../components/usercreate/view/app.usercreate.view');
+var edituserView = require('../components/useredit/view/app.useredit.view');
 
 //FOR TEST
 //TODO create rooter with real routes
