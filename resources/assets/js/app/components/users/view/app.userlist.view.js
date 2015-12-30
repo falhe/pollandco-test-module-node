@@ -24,16 +24,23 @@ var createuserView = Backbone.View.extend({
 
     initialize: function() {
         console.log('[List of users]:init');
+        this.$el.html('loading...');
+
         _.bindAll(this, 'render', 'processUser');
-        this.$el.empty();
-        this.$el.append('<h1>Liste de tous les utilisateurs</h1>');
-        this.$el.append('<table class="table table-striped table-hover table-condensed users-list" id="users-list">');
-        this.collection.fetch({
-            success: this.render
-        });
+
+        if ( this.collection) {
+            this.collection.fetch({ success: this.render });
+            this.listenTo(this.collection, 'remove', this.render);
+            this.listenTo(this.collection, 'add', this.add);
+            this.listenTo(this.collection, 'reset', this.render);
+        }
     },
 
     render: function() {
+        this.$el.empty();
+        // TODO improve how to display the table
+        this.$el.append('<h1>Liste de tous les utilisateurs</h1>');
+        this.$el.append('<table class="table table-striped table-hover table-condensed users-list" id="users-list">');
         _.each(this.collection.models, this.processUser, this);
         return this;
     },

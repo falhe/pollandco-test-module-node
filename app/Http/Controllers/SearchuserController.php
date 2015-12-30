@@ -93,7 +93,10 @@ class SearchuserController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		return 'destroy' . $id;
+		$user = User::find($id);
+		$user->delete();
+
+		return 'delete user id:' . $id;
 	}
 
 }
