@@ -1,1 +1,1 @@
-<footer>My footer section here</footer>
+<footer>{{-- My footer section here --}}</footer>

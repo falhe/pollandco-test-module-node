@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Input;
 
 use App\User;
 
@@ -27,7 +28,7 @@ class SearchuserController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		return 'create user';
 	}
 
 	/**
@@ -37,7 +38,11 @@ class SearchuserController extends Controller {
 	 */
 	public function store()
 	{
-		//
+		$input = Input::all();
+		$user = new User();
+		$user->fill($input);
+		$user->save();
+		return $user;
 	}
 
 	/**
@@ -74,7 +79,10 @@ class SearchuserController extends Controller {
 	 */
 	public function update($id)
 	{
-		return 'update' . $id;
+		$user = User::findOrFail($id);
+		$user->fill( Input::all() );
+		$user->save();
+		return $user;
 	}
 
 	/**

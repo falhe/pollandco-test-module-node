@@ -17,6 +17,10 @@
     }
 }
 
+.form-group{
+    display: flex;
+}
+
 $border-radius-base:    15px;
 $input-bg:              #F3F3F3;
 $input-border:          transparent;

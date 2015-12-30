@@ -40,6 +40,12 @@
 
     // User edit view
     .user-edit{
-        
+    }
+
+    .flash-message{
+        background-color: $brand-primary;
+        color: $sidebar-text-color;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 }

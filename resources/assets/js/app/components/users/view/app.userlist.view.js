@@ -1,11 +1,11 @@
 /*
     Template: List of all users
     url: admin/listuser
+    Controller: SearchuserController@index
 */
 
 var Backbone = require('backbone'),
     _ = require('underscore'),
-//    userModel = require('../model/app.createuser.model'),
     userItemView = require('./app.useritem.View'),
     UserList = require('../collection/app.createuser.collection');
 
@@ -20,7 +20,6 @@ var createuserView = Backbone.View.extend({
     collection: new UserList(),
 
     events: {
-
     },
 
     initialize: function() {
@@ -44,7 +43,6 @@ var createuserView = Backbone.View.extend({
             model: user
         });
         childUserItem.render();
-        //this.$el.append(childUserItem.el);
         $(this.table).append(childUserItem.el);
     }
 });

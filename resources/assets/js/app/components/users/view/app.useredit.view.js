@@ -1,8 +1,17 @@
+/*
+    Template: Edit user
+    url: admin/editteuser
+    Controller: SearchuserController@update
+*/
+
 var Backbone = require('backbone'),
     _ = require('underscore'),
-    UserEditTemplate = require('../template/app.useredit.hbs');
-var userModel = require('../model/app.createuser.model');
-var serializeJSON = require('jquery-serializejson');
+    UserEditTemplate = require('../template/app.useredit.hbs'),
+    userModel = require('../model/app.createuser.model'),
+    serializeJSON = require('jquery-serializejson'),
+    Radio = require('backbone.radio');
+
+var editUserChannel = Radio.channel('createUser');
 
 var editUserView = Backbone.View.extend({
 
@@ -18,7 +27,7 @@ var editUserView = Backbone.View.extend({
         console.log('[Edit user]:init');
 
         this.id = options.id;
-        _.bindAll(this, 'render', 'updateUser');
+        _.bindAll(this, 'render', 'updateUser', 'userEdited');
 
         //set model then fetch to have good datas
         this.model = new userModel({
@@ -28,19 +37,34 @@ var editUserView = Backbone.View.extend({
 
         this.listenTo(this.model, 'change', this.render);
 
+        this.listenTo(editUserChannel, 'show:userEdited', this.userEdited);
     },
 
     render: function() {
-        //console.log(this.model.toJSON());
         var html = this.template(this.model.toJSON());
         this.$el.html(html);
     },
 
-    updateUser: function(e){
+    updateUser: function(e) {
         e.preventDefault();
         var data = this.$el.find('#form-user-update').serializeJSON();
         this.model.set(data);
-        this.model.save();
+        this.model.save({}, {
+            success: function(data) {
+                console.log('success', data);
+                editUserChannel.trigger('show:userEdited');
+            },
+            error: function(data, jqXHR, textStatus) {
+                console.log('error', data);
+                console.log('jqXHR', jqXHR);
+                console.log('textStatus', textStatus);
+            }
+        });
+    },
+
+    userEdited: function() {
+        var message = "L'utilisateur a bien été mis à jour";
+        this.$el.find('.flash-message').removeClass('hide').html(message);
     }
 });
 
