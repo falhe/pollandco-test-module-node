@@ -3,30 +3,21 @@ var Backbone = require('backbone');
 var User = Backbone.Model.extend({
     defaults: {
         'menu': [{
-            'title': 'Utilisateur',
+            'title': 'Gestion des utilisateurs',
             'link': 'null',
             'class': 'class',
             'submenu': [{
-                'title': 'Liste de tous les Utilisateurs',
+                'title': 'Liste de tous les utilisateurs',
                 'link': 'listuser',
                 'class': 'list'
             },{
-                'title': 'Ajouter un Utilisateur',
+                'title': 'Ajouter un Community manager',
                 'link': 'createuser',
                 'class': 'create'
-            }]
-        }, {
-            'title': 'Administrateur',
-            'class': 'class',
-            'link': 'link',
-            'submenu': [{
-                'title': 'Ajouter un admin',
-                'link': 'createuser',
-                'class': 'create'
-            },{
-                'title': 'Supprimer un admin',
-                'link': 'deleteuser',
-                'class': 'delete'
+            }, {
+                'title': 'Rechercher un panéliste',
+                'link': 'searchuser',
+                'class': 'search'
             }]
         }]
     }

@@ -24,7 +24,8 @@ var Router = Backbone.Router.extend({
         "dashboard/:id": "dashboard",
         "listuser": "listuser",
         "createuser": "createuser",
-        "user/:id": "edituser"
+        "user/:id": "edituser",
+        "search": "searchuser"
     },
 
     dashboard: function() {
@@ -56,6 +57,11 @@ var Router = Backbone.Router.extend({
 
     edituser: function(id) {
         new edituserView({ id: id });
+    },
+
+    searchuser: function(){
+        console.log('searchuser');
+        console.log(this);
     }
 
 });

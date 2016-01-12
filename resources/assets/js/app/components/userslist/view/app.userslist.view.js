@@ -2,6 +2,8 @@
     Template: List of all users
     url: admin/listuser
     Controller: SearchuserController@index
+    Purpose: This view list all community manager and administrators of the website
+            Define granular level of permisions
 */
 
 var Backbone = require('backbone'),
@@ -39,7 +41,7 @@ var createuserView = Backbone.View.extend({
     render: function() {
         this.$el.empty();
         // TODO improve how to display the table
-        this.$el.append('<h1>Liste de tous les utilisateurs</h1>');
+        this.$el.append('<h1>Liste des community managers et administrateurs</h1>');
         this.$el.append('<table class="table table-striped table-hover table-condensed users-list" id="users-list">');
         _.each(this.collection.models, this.processUser, this);
         return this;
